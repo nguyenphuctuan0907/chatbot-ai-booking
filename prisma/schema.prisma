@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  username     String?        @db.VarChar(255)
+  phone        String?        @db.VarChar(20)
+  birthday     String?        @db.VarChar(50)
+  role         Role           @default(USER)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  platformId   String         @unique
+  bookings     Booking[]
+  conversation Conversation[]
+  messages     Message[]
+
+  @@map("users")
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("userId")
+  peopleCount Int
+  startTime   String
+  endTime     String
+  roundedStartTime String
+  roundedEndTime String
+  room        Int
+  day         String
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([startTime, endTime])
+  @@map("bookings")
+}
+
+model Message {
+  id               Int           @id @default(autoincrement())
+  userId           Int?
+  type             MessageType
+  role             MessageRole
+  message          String?       @db.Text
+  messageId        String?       @db.VarChar(100)
+  from             MessageSource
+  createdAt        DateTime      @default(now()) @map("created_at")
+  direction        Direction
+  processingBy     String?
+  status           MessageStatus
+  timestamp_ms     BigInt
+  platformSenderId String
+  conversationId   Int
+  conversation     Conversation  @relation(fields: [conversationId], references: [id])
+  user             User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([messageId])
+  @@index([userId, status])
+  @@index([conversationId])
+  @@map("messages")
+}
+
+model BoxPriceInterval {
+  id           Int      @id @default(autoincrement())
+  name         String? // tên khung giờ
+  pricePerHour Int      @map("price_per_hour") // giá theo giờ
+  startTime    String   @map("start_time") // thời gian bắt đầu (định dạng HH:MM)
+  endTime      String   @map("end_time") // thời gian kết thúc (định dạng HH:MM)
+  dayType      DayType  @map("day_type") // loại ngày áp dụng
+  minPeople    Int?     @map("min_people") // số người tối thiểu
+  maxPeople    Int?     @map("max_people") // số người tối đa
+  priority     Int      @default(0) // độ ưu tiên khi áp dụng(từ nhỏ đến lớn)
+  createdAt    DateTime @default(now()) @map("created_at")
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  status    ConversationStatus   @default(OPEN)
+  state     ConversationState   @default(START)
+  createdAt DateTime @default(now()) @map("created_at")
+  lastMessageAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  messages  Message[]
+
+  @@index([userId])
+}
+
+model Intent {
+  id        Int        @id @default(autoincrement())
+  name      String
+  replyText String?       @db.Text
+  isActive  Boolean       @default(true)
+
+  images    IntentImage[]
+
+  createdAt DateTime      @default(now()) @map("created_at")
+
+}
+
+model IntentImage {
+  id        Int   @id @default(autoincrement())
+  intentId  Int
+  url       String
+
+  intent    Intent   @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum DayType {
+  NORMAL // ngày thường
+  WEEKEND // cuối tuần
+  HOLIDAY // ngàu lễ
+}
+
+
+enum MessageType {
+  USER_MESSAGE
+  ADMIN_REPLY
+  BOT_REPLY
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum MessageSource {
+  MESSENGER
+  ZALO
+}
+
+enum MessageStatus {
+  PENDING
+  PROCESSING
+  SENT
+  REPLIED
+  FAILED
+}
+
+enum Direction {
+  INCOMING
+  OUTGOING
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+}
+
+enum ConversationState {
+  START
+  ASK_TIME
+  ASK_PEOPLE
+  ASK_OTHER_INFO
+  CONFIRM_BOOKING
+  CONFIRM_ASK_PRICE
+  BOOKED
+}
