@@ -3,10 +3,10 @@ import { BullModule } from "@nestjs/bullmq"
 import { MessageProcessor } from "./processor"
 import { MessageQueueService } from "./queue.service"
 import { PrismaModule } from "../../prisma/prisma.module"
-import { ConversationModule } from "src/conversation/conversation.module"
 import { AIModule } from "src/ai/ai.module"
 import { EventService } from "./event.service"
-import { BookingModule } from "src/booking/booking.module"
+import { RedisService } from "src/redis/redis.service"
+import { ConversationModule } from "src/conversation/conversation.module"
 
 @Module({
   imports: [
@@ -23,9 +23,8 @@ import { BookingModule } from "src/booking/booking.module"
     PrismaModule,
     AIModule,
     forwardRef(() => ConversationModule),
-    
   ],
-  providers: [MessageProcessor, MessageQueueService, EventService],
-  exports: [MessageQueueService, EventService],
+  providers: [MessageProcessor, MessageQueueService, EventService, RedisService],
+  exports: [MessageQueueService, EventService, RedisService],
 })
 export class QueueModule {}

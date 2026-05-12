@@ -1,29 +1,43 @@
-import axios from "axios";
-import { Processor, WorkerHost } from "@nestjs/bullmq";
-import { PrismaService } from "../../prisma/prisma.service";
-import { MESSAGE_QUEUE, MessageStatus } from "./constants";
-import { AIService, ParsedIntent } from "src/ai/ai.service";
-import { ConversationService } from "src/conversation/conversation.service";
+import axios from 'axios';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { PrismaService } from '../../prisma/prisma.service';
+import { MESSAGE_QUEUE, MessageStatus } from './constants';
+import { AIContext, AIService } from 'src/ai/ai.service';
+import { RedisService } from 'src/redis/redis.service';
+import { KaraokeSessionState } from './interfaces';
+import { ConfidenceGuard } from 'src/guards/confidence.guard';
+import { ValidatorService } from 'src/validator/booking.validator';
+import { ConversationService } from 'src/conversation/conversation.service';
+
+export const MAP_NAME_FIELD = {
+  checkIn: 'giờ đến',
+  people: 'số lượng người',
+  phone: 'số điện thoại',
+  name: 'tên',
+};
 
 @Processor(MESSAGE_QUEUE)
 export class MessageProcessor extends WorkerHost {
-
   constructor(
     private prisma: PrismaService,
     private ai: AIService,
-    private conversation: ConversationService
+    private redis: RedisService,
+    // private confidenceGuard: ConfidenceGuard,
+    // private validator: ValidatorService,
+    private conversation: ConversationService,
   ) {
     super();
-    console.log("Worker started");
+    console.log('Worker started');
   }
 
   handleGreeting = async (_, msg) => {
-
     await axios.post(
       `https://graph.facebook.com/v19.0/me/messages`,
       {
         recipient: { id: msg.platformSenderId },
-        message: { text: "68 MUSIC BOX chào bạn ạ! Bạn có muốn đặt phòng trước không ạ?" },
+        message: {
+          text: '68 MUSIC BOX chào bạn ạ! Bạn có muốn đặt phòng trước không ạ?',
+        },
       },
       {
         params: {
@@ -33,60 +47,29 @@ export class MessageProcessor extends WorkerHost {
     );
   };
 
-  handleAskPrice = async (_, msg) => {
+  handleAskPrice = async (_, msg) => {};
 
-    const { textReply, name } = await this.conversation.handleAskPrice(_, msg)
+  handleBooking = async (aiResult, session, channelConfig, jobPayload) => {
+    console.log({ aiResult, session, channelConfig });
 
-    if (textReply) {
-      await axios.post(
-        `https://graph.facebook.com/v19.0/me/messages`,
-        {
-          recipient: { id: msg.platformSenderId },
-          message: { text: textReply },
-        },
-        {
-          params: {
-            access_token: process.env.PAGE_ACCESS_TOKEN,
-          },
-        });
-    } else {
-      this.handleSendMessage({ name, senderId: msg.platformSenderId, conversationId: msg.conversationId })
-    }
-
+    return this.conversation.handleBooking(
+      aiResult,
+      session,
+      jobPayload.userId,
+    );
   };
 
-  handleBooking = async (_, msg) => {
-    const { textReply, name, closeConversation } = await this.conversation.handleBooking(_, msg);
-    console.log({ textReply, name, msg });
+  handleUpdateBooking = async (aiResult, session, channelConfig) => {
+    console.log({ aiResult, session, channelConfig });
 
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages`,
-      {
-        recipient: { id: msg.platformSenderId },
-        message: { text: textReply },
-      },
-      {
-        params: {
-          access_token: process.env.PAGE_ACCESS_TOKEN,
-        },
-      });
-
-
-    if (closeConversation) {
-      await this.prisma.conversation.update({
-        where: { id: msg.conversationId },
-        data: { state: "CONFIRM_BOOKING", status: "CLOSED" }
-      })
-      return;
-    }
-
-
-  }
+    return this.conversation.handleUpdateBooking(aiResult, session);
+  };
 
   private INTENT_MAP = {
     greeting: this.handleGreeting,
     booking: this.handleBooking,
     ask_price: this.handleAskPrice,
+    update_booking: this.handleUpdateBooking,
     // other: handleOther,
     // promotion: handlePromotion,
     // ask_services_genneral: handleAskServicesGeneral,
@@ -98,14 +81,22 @@ export class MessageProcessor extends WorkerHost {
     // thank_you: handleThankYou,
   };
 
-  async handleSendMessage({ name, senderId, conversationId }: { name: string, senderId: string, conversationId: number }) {
+  async handleSendMessage({
+    name,
+    senderId,
+    conversationId,
+  }: {
+    name: string;
+    senderId: string;
+    conversationId: number;
+  }) {
     const intent = await this.prisma.intent.findFirst({
       where: { name },
       include: { images: true },
-    })
+    });
 
     if (!intent) {
-      console.warn("Intent ask_price not found in DB");
+      console.warn('Intent ask_price not found in DB');
       return;
     }
 
@@ -118,10 +109,10 @@ export class MessageProcessor extends WorkerHost {
             {
               recipient: { id: senderId },
               message: {
-                "attachment": {
+                attachment: {
                   type: 'image',
-                  payload: { url: img.url, "is_reusable": true }
-                }
+                  payload: { url: img.url, is_reusable: true },
+                },
               },
             },
             {
@@ -131,7 +122,7 @@ export class MessageProcessor extends WorkerHost {
             },
           );
         } catch (e) {
-          console.error("Error sending image:", e);
+          console.error('Error sending image:', e);
         }
       }
     }
@@ -148,85 +139,83 @@ export class MessageProcessor extends WorkerHost {
         },
       },
     );
-
-    await this.prisma.conversation.update({
-      where: { id: conversationId },
-      data: { state: "CONFIRM_ASK_PRICE", status: "CLOSED" }
-    })
-
   }
 
   async process(job: any) {
-    const { messageId } = job.data;
-    console.log(`Processing message with ID: ${messageId}`);
-
-    // claim atomic
-    const result = await this.prisma.message.updateMany({
-      where: {
-        id: messageId,
-        status: MessageStatus.PENDING
-      },
-      data: {
-        status: MessageStatus.PROCESSING,
-        processingBy: "worker"
-      }
-    })
-
-    if (result.count === 0) return; // admin đã xử lý
-
-    const msg = await this.prisma.message.findUnique({
-      where: { id: messageId },
-    });
-
-    if (!msg || !msg.userId) return;
+    const { jobPayload } = job.data;
+    console.dir(jobPayload, { depth: null });
 
     /* ---------- load context ---------- */
-    const context = await this.getContext(msg.conversationId);
-    console.log("Loaded context:", context);
-    let ai: ParsedIntent;
     try {
-      ai = await this.ai.parse(context);
-    } catch (e) {
-      console.error("Error parsing AI context:", e);
-      await this.fail(messageId);
-      return;
-    }
+      // Truy vấn xem page_id này thuộc về quán nào
+      const channelConfig = await this.prisma.channel.findUnique({
+        where: { id: jobPayload.channelId },
+        include: { tenant: true },
+      });
 
-    console.log("AI parsed result:", ai);
+      console.log('channelConfig', channelConfig);
 
-
-    try {
-      const handler = this.INTENT_MAP[ai.intent];
-      if (handler) {
-        await handler(ai, msg);
-
-
-      } else {
-        console.warn("No handler for intent:", ai.intent);
+      if (!channelConfig) {
+        console.error(`Unrecognized channel ID: ${jobPayload.channelId}`);
+        return; // Bỏ qua nếu page chưa được kết nối
       }
 
-      await this.prisma.message.update({
-        where: { id: messageId },
-        data: { status: MessageStatus.REPLIED },
-      });
+      // 1. GET SESSION
+      let session = await this.redis.getSession(jobPayload.userId);
+
+      if (!session) {
+        // Nếu chưa có, khởi tạo state mới tinh
+        session = this.redis.createDefault(jobPayload, channelConfig);
+      }
+      console.log('[Worker] Loaded session from Redis:', session);
+      const aiContext: AIContext = {
+        tenantName: session.tenantName,
+        status: session.status,
+        subStatus: session.subStatus,
+        primaryFlow: session.primaryFlow,
+        lastIntent: session.lastIntent,
+        lastAskedFields: session.missingFields,
+        suggestedSlots: session.suggestedSlots,
+        bookingData: session.bookingData, // Gồm giờ, tên, SĐT, số người...
+      };
+
+      const aiResult = await this.ai.parse(aiContext, jobPayload.text);
+      console.log('[Worker] AI parsed result:', aiResult);
+
+      const action = await this.conversation.intentRouter(
+        aiResult,
+        session,
+        channelConfig,
+        jobPayload,
+      );
+
+      const reply = this.responseBuilder(action, session);
+
+      await axios.post(
+        `https://graph.facebook.com/v19.0/me/messages`,
+        {
+          recipient: { id: jobPayload.platformSenderId },
+          message: { text: reply },
+        },
+        {
+          params: {
+            access_token: process.env.PAGE_ACCESS_TOKEN,
+          },
+        },
+      );
+      console.log('session after handler:', session);
+      //. CẬP NHẬT TRẠNG THÁI (State Merge)
+      session.updatedAt = Date.now();
+      await this.redis.saveSession(jobPayload.userId, session);
+
+      // this.confidenceGuard.check(aiResult);
+
+      // this.validator.validate(aiResult);
     } catch (e) {
-      console.error("Error handling intent:", e);
+      console.error('Error parsing AI context:', e);
+      // await this.fail(jobPayload.id);
       return;
     }
-
-  }
-
-  async getContext(conversationId: number) {
-    const msgs = await this.prisma.message.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: "asc" },
-      take: 20
-    })
-
-    return msgs.map(m => ({
-      role: m.role.toLowerCase(),
-      content: m.message
-    }))
   }
 
   async done(id: number) {
@@ -241,5 +230,56 @@ export class MessageProcessor extends WorkerHost {
       where: { id },
       data: { status: MessageStatus.FAILED },
     });
+  }
+
+  responseBuilder(action, session) {
+    console.log('Building response for action:', action, session);
+    switch (action.type) {
+      case 'SWITCH_FLOW':
+        return 'Dạ mình đặt phòng ạ ❤️ Cho em xin giờ, số khách và sđt nhé.';
+      case 'SUGGEST_SLOT':
+        return `😓 Đã hết mất phòng trống, hiện tại phải đợi đến ${session.suggestedSlots[0]} mới có phòng trống ạ. Bạn có muốn đặt phòng vào khung giờ đó không ạ?`;
+
+      case 'FULL_BOOKED':
+        return `😓 Rất tiếc hiện tại không còn phòng trống nào phù hợp với yêu cầu của bạn ạ. Bạn có thể gọi điện trực tiếp hootline để được hỗ trợ chính xác hơn nhé: 0123456789`;
+      case 'INTERRUPT':
+        return `
+Dạ giá bên em từ 200k/giờ ❤️
+
+Mình tiếp tục booking nhé,
+cho em xin thêm:
+${session.missingFields.join(', ')}
+`;
+
+      case 'INVALID_CONFIRM':
+        return 'Dạ mình chưa đủ thông tin để xác nhận booking ạ ❤️';
+
+      case 'CONFIRM_SUGGESTED_SLOT':
+        return `
+Dạ mình có thể đặt phòng vào khung giờ ${session.suggestedSlots[0]} ạ ❤️`;
+
+      case 'COMPLETE':
+        return 'Booking của anh/chị đã được tạo thành công ❤️';
+
+      case 'CONFIRM':
+        return `
+Em xin xác nhận booking:
+
+${JSON.stringify(session.bookingData)}
+
+Anh/chị xác nhận giúp em nhé ❤️
+`;
+
+      case 'ASK_MISSING':
+        session.lastAskedFields = session.missingFields;
+
+        return `
+Cho em xin thêm:
+${session.missingFields.map((field) => MAP_NAME_FIELD[field] || field).join(', ')}
+`;
+
+      default:
+        return 'Dạ em chưa hiểu ý mình lắm ạ ❤️';
+    }
   }
 }

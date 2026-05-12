@@ -8,10 +8,10 @@ export class MessageQueueService {
     @InjectQueue("message-queue") private queue: Queue,
   ) {}
 
-  async enqueue(messageId: number) {
+  async enqueue(jobPayload: any) {
     await this.queue.add(
       "process-message",
-      { messageId },
+      { jobPayload },
       {
         delay: 1000, // ưu tiên admin 20s
         attempts: 3,

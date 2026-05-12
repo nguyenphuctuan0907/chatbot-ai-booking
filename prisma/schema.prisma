@@ -6,6 +6,84 @@ datasource db {
   provider = "mysql"
 }
 
+// ==========================================
+// 1. BẢNG TENANT (Các đối tác / Thương hiệu quán)
+// ==========================================
+model Tenant {
+  id                     String  @id @default(uuid())
+  name                   String // VD: "Music Box Karaoke"
+  requireBranchSelection Boolean @default(false) // Chuỗi thì true, quán lẻ thì false
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Quan hệ 1-nhiều
+  branches Branch[]
+  channels Channel[]
+  bookings Booking[]
+  chatLogs ChatLog[]
+}
+
+// ==========================================
+// 2. BẢNG BRANCH (Các chi nhánh)
+// ==========================================
+model Branch {
+  id       String  @id @default(uuid())
+  tenantId String
+  name     String // VD: "Cầu Giấy", "Hà Đông"
+  address  String  @db.Text // VD: "123 Xuân Thủy, Cầu Giấy"
+  aliases  String? // Các từ khóa khách hay gõ (VD: "xuan thuy, xuan thuy cau giay")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Khóa ngoại
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Quan hệ ngược
+  channels Channel[] // Các page mặc định đổ về nhánh này
+  bookings Booking[]
+}
+
+// ==========================================
+// 3. BẢNG CHANNEL (Các kênh Fanpage FB, Zalo OA, TikTok)
+// ==========================================
+model Channel {
+  id              String  @id // Dùng chính page_id của FB hoặc oa_id của Zalo làm ID
+  platform        String // VD: "facebook", "zalo", "tiktok"
+  tenantId        String
+  defaultBranchId String? // Nếu page này chỉ dành cho 1 nhánh, gán ID nhánh vào đây
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Khóa ngoại
+  tenant        Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultBranch Branch? @relation(fields: [defaultBranchId], references: [id], onDelete: SetNull)
+
+  @@unique([id, platform]) // Đảm bảo không trùng ID trên cùng 1 nền tảng
+}
+
+// ==========================================
+// 4. BẢNG CHAT LOG (Lịch sử chat thô để Fine-tune AI)
+// ==========================================
+model ChatLog {
+  id        String @id @default(uuid())
+  sessionId String // ID của user (zalo_id, fb_psid) để gom nhóm theo phiên
+  tenantId  String
+
+  userMsg      String @db.Text // Tin nhắn khách gõ (Input)
+  currentState Json // Trạng thái bookingData lúc khách nhắn (Input)
+
+  aiIntent  String? // Intent AI bóc được (Output)
+  aiUpdates Json? // Các key AI bóc được (Output)
+
+  createdAt DateTime @default(now())
+
+  // Khóa ngoại
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
 model User {
   id           Int            @id @default(autoincrement())
   username     String?        @db.VarChar(255)
@@ -22,20 +100,27 @@ model User {
 }
 
 model Booking {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @map("userId")
-  peopleCount Int
-  startTime   String
-  endTime     String
+  id       Int     @id @default(autoincrement())
+  tenantId String
+  branchId String?
+  userId   Int     @map("userId")
+
+  peopleCount      Int?
+  checkIn          String
+  checkOut         String
+  room             Int
+  day              String
   roundedStartTime String
-  roundedEndTime String
-  room        Int
-  day         String
-  createdAt   DateTime @default(now()) @map("created_at")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roundedEndTime   String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Khóa ngoại
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  branch    Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
   @@index([userId])
-  @@index([startTime, endTime])
+  @@index([checkIn, checkOut])
   @@map("bookings")
 }
 
@@ -78,36 +163,35 @@ model BoxPriceInterval {
 }
 
 model Conversation {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  status    ConversationStatus   @default(OPEN)
-  state     ConversationState   @default(START)
-  createdAt DateTime @default(now()) @map("created_at")
-  lastMessageAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  messages  Message[]
+  id            Int                @id @default(autoincrement())
+  userId        Int
+  status        ConversationStatus @default(OPEN)
+  state         ConversationState  @default(START)
+  createdAt     DateTime           @default(now()) @map("created_at")
+  lastMessageAt DateTime           @default(now())
+  user          User               @relation(fields: [userId], references: [id])
+  messages      Message[]
 
   @@index([userId])
 }
 
 model Intent {
-  id        Int        @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
-  replyText String?       @db.Text
-  isActive  Boolean       @default(true)
+  replyText String? @db.Text
+  isActive  Boolean @default(true)
 
-  images    IntentImage[]
+  images IntentImage[]
 
-  createdAt DateTime      @default(now()) @map("created_at")
-
+  createdAt DateTime @default(now()) @map("created_at")
 }
 
 model IntentImage {
-  id        Int   @id @default(autoincrement())
-  intentId  Int
-  url       String
+  id       Int    @id @default(autoincrement())
+  intentId Int
+  url      String
 
-  intent    Intent   @relation(fields: [intentId], references: [id], onDelete: Cascade)
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
 }
@@ -122,7 +206,6 @@ enum DayType {
   WEEKEND // cuối tuần
   HOLIDAY // ngàu lễ
 }
-
 
 enum MessageType {
   USER_MESSAGE
