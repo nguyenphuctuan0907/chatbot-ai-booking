@@ -1,0 +1,4756 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+.prettierrc
+eslint.config.mjs
+jest.config.ts
+nest-cli.json
+package.json
+prisma.config.ts
+prisma/migrations/20260223073325_init/migration.sql
+prisma/migrations/20260224021312_init_messages/migration.sql
+prisma/migrations/20260225013153_update_filed_mess/migration.sql
+prisma/migrations/20260225013215_update_filed_mess_index/migration.sql
+prisma/migrations/20260225035241_delete_field_mess/migration.sql
+prisma/migrations/20260225040831_fix_relation/migration.sql
+prisma/migrations/20260225064219_fix_able_user_id_messange/migration.sql
+prisma/migrations/20260304073001_add_intent_module/migration.sql
+prisma/migrations/20260304073807_add_intent_maping/migration.sql
+prisma/migrations/20260304080435_add_intent/migration.sql
+prisma/migrations/20260304081230_add_intent/migration.sql
+prisma/migrations/20260304081407_add_intent/migration.sql
+prisma/migrations/20260311151443_add_conversation_id/migration.sql
+prisma/migrations/20260312042516_add_old_conversation_id/migration.sql
+prisma/migrations/20260312103721_chatbot/migration.sql
+prisma/migrations/20260323092112_init/migration.sql
+prisma/migrations/20260323092202_add_cloumn_room/migration.sql
+prisma/migrations/20260324094935_add_cloumn_day/migration.sql
+prisma/migrations/20260331092149_update_type_time_booking/migration.sql
+prisma/migrations/20260409054333_saas_chatbot_schema/migration.sql
+prisma/migrations/migration_lock.toml
+prisma/prisma.module.ts
+prisma/prisma.service.ts
+prisma/schema.prisma
+README.md
+src/ai/ai.module.ts
+src/ai/ai.service.ts
+src/app.controller.spec.ts
+src/app.controller.ts
+src/app.module.ts
+src/app.service.ts
+src/booking/booking.controller.ts
+src/booking/booking.gateway.ts
+src/booking/booking.module.ts
+src/booking/booking.queue.ts
+src/booking/booking.service.ts
+src/booking/booking.worker.ts
+src/booking/BookingCoreModule.module.ts
+src/booking/common.ts
+src/chatbot.price.e2e.spec.ts
+src/common.spec.ts
+src/common.ts
+src/conversation/conversation-session.service.ts
+src/conversation/conversation.module.ts
+src/conversation/conversation.service.ts
+src/guards/confidence.guard.ts
+src/intent/dto/create-intent.dto.ts
+src/intent/dto/update-intent.dto.ts
+src/intent/intent.controller.ts
+src/intent/intent.module.ts
+src/intent/intent.service.ts
+src/main.ts
+src/memory/memory.module.ts
+src/memory/memory.service.ts
+src/messenger/messenger.controller.spec.ts
+src/messenger/messenger.controller.ts
+src/messenger/messenger.module.ts
+src/messenger/messenger.service.spec.ts
+src/messenger/messenger.service.ts
+src/queue/constants.ts
+src/queue/event.service.ts
+src/queue/interfaces.ts
+src/queue/processor.ts
+src/queue/queue.module.ts
+src/queue/queue.service.ts
+src/queue/queue.stream.ts
+src/r2/r2.controller.ts
+src/r2/r2.module.ts
+src/r2/r2.service.ts
+src/redis/redis.service.ts
+src/validator/booking.validator.ts
+src/worker.ts
+test/app.e2e-spec.ts
+test/jest-e2e.json
+tmpclaude-3fd6-cwd
+tsconfig.build.json
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# temp directory
+.temp
+.tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
+</file>
+
+<file path=".prettierrc">
+{
+  "singleQuote": true,
+  "trailingComma": "all"
+}
+</file>
+
+<file path="eslint.config.mjs">
+// @ts-check
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['eslint.config.mjs'],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  eslintPluginPrettierRecommended,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+      sourceType: 'commonjs',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
+    },
+  },
+);
+</file>
+
+<file path="jest.config.ts">
+import type { Config } from "jest";
+
+const config: Config = {
+  moduleFileExtensions: ["js", "json", "ts"],
+
+  rootDir: ".",
+
+  testRegex: ".*\\.spec\\.ts$",
+
+  transform: {
+    "^.+\\.(t|j)s$": "ts-jest",
+  },
+
+  moduleNameMapper: {
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^prisma/(.*)$": "<rootDir>/prisma/$1",
+  },
+
+  testEnvironment: "node",
+};
+
+export default config;
+</file>
+
+<file path="nest-cli.json">
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true
+  }
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "be-chatbot",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "worker": "ts-node src/worker.ts",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1002.0",
+    "@aws-sdk/s3-request-presigner": "^3.1002.0",
+    "@nestjs/bullmq": "^11.0.4",
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-socket.io": "^11.1.17",
+    "@nestjs/websockets": "^11.1.17",
+    "@prisma/adapter-mariadb": "^7.4.1",
+    "@prisma/client": "^7.4.1",
+    "axios": "^1.13.5",
+    "bullmq": "^5.70.1",
+    "chrono-node": "^2.9.0",
+    "class-validator": "^0.14.4",
+    "dayjs": "^1.11.20",
+    "ioredis": "^5.9.3",
+    "mysql2": "^3.17.4",
+    "prisma": "^7.4.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.8.3",
+    "uuid": "^13.0.0",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.1",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.10.7",
+    "@types/supertest": "^6.0.2",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^16.0.0",
+    "jest": "^30.0.0",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.4.6",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  }
+}
+</file>
+
+<file path="prisma.config.ts">
+// This file was generated by Prisma, and assumes you have installed the following:
+// npm install --save-dev prisma dotenv
+import "dotenv/config";
+import { defineConfig } from "prisma/config";
+
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+  },
+  datasource: {
+    url: process.env["DATABASE_URL"],
+  },
+});
+</file>
+
+<file path="prisma/migrations/20260223073325_init/migration.sql">
+-- CreateTable
+CREATE TABLE `users` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(255) NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `birthday` VARCHAR(50) NULL,
+    `role` ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER',
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `bookings` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `peopleCount` INTEGER NOT NULL,
+    `startTime` DATETIME(3) NOT NULL,
+    `endTime` DATETIME(3) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `bookings_userId_idx`(`userId`),
+    INDEX `bookings_startTime_endTime_idx`(`startTime`, `endTime`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260224021312_init_messages/migration.sql">
+-- CreateTable
+CREATE TABLE `messages` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `type` ENUM('USER_MESSAGE', 'ADMIN_REPLY', 'BOT_REPLY') NOT NULL,
+    `role` ENUM('USER', 'ASSISTANT') NOT NULL,
+    `message` TEXT NULL,
+    `messageId` VARCHAR(100) NULL,
+    `from` ENUM('MESSENGER', 'ZALO') NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `messages_userId_created_at_idx`(`userId`, `created_at`),
+    INDEX `messages_messageId_idx`(`messageId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `messages` ADD CONSTRAINT `messages_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260225013153_update_filed_mess/migration.sql">
+/*
+  Warnings:
+
+  - A unique constraint covering the columns `[mid]` on the table `messages` will be added. If there are existing duplicate values, this will fail.
+  - Added the required column `direction` to the `messages` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `mid` to the `messages` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `status` to the `messages` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `timestamp_ms` to the `messages` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `messages` ADD COLUMN `direction` VARCHAR(191) NOT NULL,
+    ADD COLUMN `mid` VARCHAR(191) NOT NULL,
+    ADD COLUMN `processingBy` VARCHAR(191) NULL,
+    ADD COLUMN `status` VARCHAR(191) NOT NULL,
+    ADD COLUMN `timestamp_ms` BIGINT NOT NULL;
+
+-- CreateIndex
+CREATE UNIQUE INDEX `messages_mid_key` ON `messages`(`mid`);
+</file>
+
+<file path="prisma/migrations/20260225013215_update_filed_mess_index/migration.sql">
+-- CreateIndex
+CREATE INDEX `messages_userId_status_idx` ON `messages`(`userId`, `status`);
+</file>
+
+<file path="prisma/migrations/20260225035241_delete_field_mess/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the column `mid` on the `messages` table. All the data in the column will be lost.
+
+*/
+-- DropIndex
+DROP INDEX `messages_mid_key` ON `messages`;
+
+-- AlterTable
+ALTER TABLE `messages` DROP COLUMN `mid`;
+</file>
+
+<file path="prisma/migrations/20260225040831_fix_relation/migration.sql">
+/*
+  Warnings:
+
+  - A unique constraint covering the columns `[platformId]` on the table `users` will be added. If there are existing duplicate values, this will fail.
+  - Added the required column `platformSenderId` to the `messages` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `platformId` to the `users` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `messages` ADD COLUMN `platformSenderId` VARCHAR(191) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `users` ADD COLUMN `platformId` VARCHAR(191) NOT NULL;
+
+-- CreateIndex
+CREATE UNIQUE INDEX `users_platformId_key` ON `users`(`platformId`);
+</file>
+
+<file path="prisma/migrations/20260225064219_fix_able_user_id_messange/migration.sql">
+-- AlterTable
+ALTER TABLE `messages` MODIFY `userId` INTEGER NULL;
+</file>
+
+<file path="prisma/migrations/20260304073001_add_intent_module/migration.sql">
+/*
+  Warnings:
+
+  - You are about to alter the column `direction` on the `messages` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `Enum(EnumId(3))`.
+  - You are about to alter the column `status` on the `messages` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `Enum(EnumId(4))`.
+
+*/
+-- AlterTable
+ALTER TABLE `messages` MODIFY `direction` ENUM('INCOMING', 'OUTGOING') NOT NULL,
+    MODIFY `status` ENUM('PENDING', 'PROCESSING', 'SENT', 'REPLIED', 'FAILED') NOT NULL;
+
+-- CreateTable
+CREATE TABLE `Intent` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `replyText` TEXT NULL,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `IntentImage` (
+    `id` VARCHAR(191) NOT NULL,
+    `intentId` VARCHAR(191) NOT NULL,
+    `url` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `IntentImage` ADD CONSTRAINT `IntentImage_intentId_fkey` FOREIGN KEY (`intentId`) REFERENCES `Intent`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260304073807_add_intent_maping/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the `intentimage` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- DropForeignKey
+ALTER TABLE `intentimage` DROP FOREIGN KEY `IntentImage_intentId_fkey`;
+
+-- DropTable
+DROP TABLE `intentimage`;
+
+-- CreateTable
+CREATE TABLE `intent_image` (
+    `id` VARCHAR(191) NOT NULL,
+    `intentId` VARCHAR(191) NOT NULL,
+    `url` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `intent_image` ADD CONSTRAINT `intent_image_intentId_fkey` FOREIGN KEY (`intentId`) REFERENCES `intent`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260304080435_add_intent/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the `intent_image` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- DropForeignKey
+ALTER TABLE `intent_image` DROP FOREIGN KEY `intent_image_intentId_fkey`;
+
+-- DropTable
+DROP TABLE `intent_image`;
+
+-- CreateTable
+CREATE TABLE `IntentImage` (
+    `id` VARCHAR(191) NOT NULL,
+    `intentId` VARCHAR(191) NOT NULL,
+    `url` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `IntentImage` ADD CONSTRAINT `IntentImage_intentId_fkey` FOREIGN KEY (`intentId`) REFERENCES `Intent`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260304081230_add_intent/migration.sql">
+/*
+  Warnings:
+
+  - The primary key for the `intent` table will be changed. If it partially fails, the table could be left without primary key constraint.
+  - You are about to alter the column `id` on the `intent` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `Int`.
+  - The primary key for the `intentimage` table will be changed. If it partially fails, the table could be left without primary key constraint.
+  - You are about to alter the column `id` on the `intentimage` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `Int`.
+  - You are about to alter the column `intentId` on the `intentimage` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `Int`.
+
+*/
+-- DropForeignKey
+ALTER TABLE `intentimage` DROP FOREIGN KEY `IntentImage_intentId_fkey`;
+
+-- DropIndex
+DROP INDEX `IntentImage_intentId_fkey` ON `intentimage`;
+
+-- AlterTable
+ALTER TABLE `intent` DROP PRIMARY KEY,
+    MODIFY `id` INTEGER NOT NULL AUTO_INCREMENT,
+    ADD PRIMARY KEY (`id`);
+
+-- AlterTable
+ALTER TABLE `intentimage` DROP PRIMARY KEY,
+    MODIFY `id` INTEGER NOT NULL AUTO_INCREMENT,
+    MODIFY `intentId` INTEGER NOT NULL,
+    ADD PRIMARY KEY (`id`);
+
+-- AddForeignKey
+ALTER TABLE `IntentImage` ADD CONSTRAINT `IntentImage_intentId_fkey` FOREIGN KEY (`intentId`) REFERENCES `Intent`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260304081407_add_intent/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the column `createdAt` on the `intent` table. All the data in the column will be lost.
+  - You are about to drop the column `updatedAt` on the `intent` table. All the data in the column will be lost.
+  - You are about to drop the column `createdAt` on the `intentimage` table. All the data in the column will be lost.
+
+*/
+-- AlterTable
+ALTER TABLE `intent` DROP COLUMN `createdAt`,
+    DROP COLUMN `updatedAt`,
+    ADD COLUMN `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
+
+-- AlterTable
+ALTER TABLE `intentimage` DROP COLUMN `createdAt`,
+    ADD COLUMN `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
+</file>
+
+<file path="prisma/migrations/20260311151443_add_conversation_id/migration.sql">
+-- AlterTable
+ALTER TABLE `messages` ADD COLUMN `conversationId` VARCHAR(191) NULL;
+
+-- AlterTable
+ALTER TABLE `users` ADD COLUMN `currentConversationId` VARCHAR(191) NULL;
+</file>
+
+<file path="prisma/migrations/20260312042516_add_old_conversation_id/migration.sql">
+-- AlterTable
+ALTER TABLE `users` ADD COLUMN `oldConversationId` VARCHAR(191) NULL;
+</file>
+
+<file path="prisma/migrations/20260312103721_chatbot/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the column `currentConversationId` on the `users` table. All the data in the column will be lost.
+  - You are about to drop the column `oldConversationId` on the `users` table. All the data in the column will be lost.
+  - Made the column `conversationId` on table `messages` required. This step will fail if there are existing NULL values in that column.
+
+*/
+-- AlterTable
+ALTER TABLE `messages` MODIFY `conversationId` INTEGER NOT NULL;
+
+-- AlterTable
+ALTER TABLE `users` DROP COLUMN `currentConversationId`,
+    DROP COLUMN `oldConversationId`;
+
+-- CreateTable
+CREATE TABLE `Conversation` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `status` ENUM('OPEN', 'CLOSED') NOT NULL DEFAULT 'OPEN',
+    `state` ENUM('START', 'ASK_DATE', 'ASK_TIME', 'CONFIRM_BOOKING', 'CONFIRM_ASK_PRICE', 'BOOKED') NOT NULL DEFAULT 'START',
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `Conversation_userId_idx`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Conversation` ADD CONSTRAINT `Conversation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `messages` ADD CONSTRAINT `messages_conversationId_fkey` FOREIGN KEY (`conversationId`) REFERENCES `Conversation`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/20260323092112_init/migration.sql">
+/*
+  Warnings:
+
+  - The values [ASK_DATE] on the enum `conversation_state` will be removed. If these variants are still used in the database, this will fail.
+
+*/
+-- AlterTable
+ALTER TABLE `conversation` ADD COLUMN `lastMessageAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    MODIFY `state` ENUM('START', 'ASK_TIME', 'ASK_PEOPLE', 'ASK_OTHER_INFO', 'CONFIRM_BOOKING', 'CONFIRM_ASK_PRICE', 'BOOKED') NOT NULL DEFAULT 'START';
+
+-- AlterTable
+ALTER TABLE `users` MODIFY `phone` VARCHAR(20) NULL;
+
+-- CreateTable
+CREATE TABLE `boxpriceinterval` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NULL,
+    `price_per_hour` INTEGER NOT NULL,
+    `start_time` VARCHAR(191) NOT NULL,
+    `end_time` VARCHAR(191) NOT NULL,
+    `day_type` ENUM('NORMAL', 'WEEKEND', 'HOLIDAY') NOT NULL,
+    `min_people` INTEGER NULL,
+    `max_people` INTEGER NULL,
+    `priority` INTEGER NOT NULL DEFAULT 0,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- RenameIndex
+ALTER TABLE `messages` RENAME INDEX `messages_conversationId_fkey` TO `messages_conversationId_idx`;
+</file>
+
+<file path="prisma/migrations/20260323092202_add_cloumn_room/migration.sql">
+/*
+  Warnings:
+
+  - Added the required column `room` to the `bookings` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `bookings` ADD COLUMN `room` INTEGER NOT NULL;
+</file>
+
+<file path="prisma/migrations/20260324094935_add_cloumn_day/migration.sql">
+/*
+  Warnings:
+
+  - Added the required column `day` to the `bookings` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `bookings` ADD COLUMN `day` VARCHAR(191) NOT NULL;
+</file>
+
+<file path="prisma/migrations/20260331092149_update_type_time_booking/migration.sql">
+/*
+  Warnings:
+
+  - Added the required column `roundedEndTime` to the `bookings` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `roundedStartTime` to the `bookings` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- AlterTable
+ALTER TABLE `bookings` ADD COLUMN `roundedEndTime` VARCHAR(191) NOT NULL,
+    ADD COLUMN `roundedStartTime` VARCHAR(191) NOT NULL,
+    MODIFY `startTime` VARCHAR(191) NOT NULL,
+    MODIFY `endTime` VARCHAR(191) NOT NULL;
+</file>
+
+<file path="prisma/migrations/20260409054333_saas_chatbot_schema/migration.sql">
+/*
+  Warnings:
+
+  - You are about to drop the column `endTime` on the `bookings` table. All the data in the column will be lost.
+  - You are about to drop the column `startTime` on the `bookings` table. All the data in the column will be lost.
+  - Added the required column `checkIn` to the `bookings` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `checkOut` to the `bookings` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `tenantId` to the `bookings` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- DropIndex
+DROP INDEX `bookings_startTime_endTime_idx` ON `bookings`;
+
+-- AlterTable
+ALTER TABLE `bookings` DROP COLUMN `endTime`,
+    DROP COLUMN `startTime`,
+    ADD COLUMN `branchId` VARCHAR(191) NULL,
+    ADD COLUMN `checkIn` VARCHAR(191) NOT NULL,
+    ADD COLUMN `checkOut` VARCHAR(191) NOT NULL,
+    ADD COLUMN `tenantId` VARCHAR(191) NOT NULL,
+    MODIFY `peopleCount` INTEGER NULL;
+
+-- CreateTable
+CREATE TABLE `Tenant` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `requireBranchSelection` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Branch` (
+    `id` VARCHAR(191) NOT NULL,
+    `tenantId` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `address` TEXT NOT NULL,
+    `aliases` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Channel` (
+    `id` VARCHAR(191) NOT NULL,
+    `platform` VARCHAR(191) NOT NULL,
+    `tenantId` VARCHAR(191) NOT NULL,
+    `defaultBranchId` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `Channel_id_platform_key`(`id`, `platform`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ChatLog` (
+    `id` VARCHAR(191) NOT NULL,
+    `sessionId` VARCHAR(191) NOT NULL,
+    `tenantId` VARCHAR(191) NOT NULL,
+    `userMsg` TEXT NOT NULL,
+    `currentState` JSON NOT NULL,
+    `aiIntent` VARCHAR(191) NULL,
+    `aiUpdates` JSON NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateIndex
+CREATE INDEX `bookings_checkIn_checkOut_idx` ON `bookings`(`checkIn`, `checkOut`);
+
+-- AddForeignKey
+ALTER TABLE `Branch` ADD CONSTRAINT `Branch_tenantId_fkey` FOREIGN KEY (`tenantId`) REFERENCES `Tenant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Channel` ADD CONSTRAINT `Channel_tenantId_fkey` FOREIGN KEY (`tenantId`) REFERENCES `Tenant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Channel` ADD CONSTRAINT `Channel_defaultBranchId_fkey` FOREIGN KEY (`defaultBranchId`) REFERENCES `Branch`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ChatLog` ADD CONSTRAINT `ChatLog_tenantId_fkey` FOREIGN KEY (`tenantId`) REFERENCES `Tenant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_tenantId_fkey` FOREIGN KEY (`tenantId`) REFERENCES `Tenant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_branchId_fkey` FOREIGN KEY (`branchId`) REFERENCES `Branch`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+</file>
+
+<file path="prisma/migrations/migration_lock.toml">
+# Please do not edit this file manually
+# It should be added in your version-control system (e.g., Git)
+provider = "mysql"
+</file>
+
+<file path="prisma/prisma.module.ts">
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+</file>
+
+<file path="prisma/prisma.service.ts">
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from '@prisma/client';
+
+function parseDatabaseUrl(url?: string) {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    return {
+      host: u.hostname,
+      port: Number(u.port || 3306),
+      user: decodeURIComponent(u.username || ''),
+      password: decodeURIComponent(u.password || ''),
+      database: u.pathname ? u.pathname.replace(/^\//, '') : '',
+    };
+  } catch (err) {
+    console.error('[parseDatabaseUrl] invalid DATABASE_URL:', url);
+    console.error(err);
+    return null;
+  }
+}
+
+@Injectable()
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
+  constructor() {
+    const parsed = parseDatabaseUrl(process.env.DATABASE_URL);
+
+    if (!parsed) {
+      // Nếu không parse được, throw để phát hiện sớm
+      throw new Error('DATABASE_URL is missing or invalid. Check your .env.');
+    }
+
+    const adapter = new PrismaMariaDb({
+      host: parsed.host,
+      port: parsed.port,
+      user: parsed.user,
+      password: parsed.password,
+      database: parsed.database,
+      connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
+      connectTimeout: Number(process.env.DB_CONNECT_TIMEOUT || 10000),
+    });
+
+    super({
+      adapter,
+      log: ['info', 'warn', 'error'],
+    });
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    try {
+      await this.$disconnect();
+    } catch (err) {
+      console.warn('[PrismaService] $disconnect ERROR', err);
+    }
+  }
+}
+</file>
+
+<file path="prisma/schema.prisma">
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ==========================================
+// 1. BẢNG TENANT (Các đối tác / Thương hiệu quán)
+// ==========================================
+model Tenant {
+  id                     String  @id @default(uuid())
+  name                   String // VD: "Music Box Karaoke"
+  requireBranchSelection Boolean @default(false) // Chuỗi thì true, quán lẻ thì false
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Quan hệ 1-nhiều
+  branches Branch[]
+  channels Channel[]
+  bookings Booking[]
+  chatLogs ChatLog[]
+}
+
+// ==========================================
+// 2. BẢNG BRANCH (Các chi nhánh)
+// ==========================================
+model Branch {
+  id       String  @id @default(uuid())
+  tenantId String
+  name     String // VD: "Cầu Giấy", "Hà Đông"
+  address  String  @db.Text // VD: "123 Xuân Thủy, Cầu Giấy"
+  aliases  String? // Các từ khóa khách hay gõ (VD: "xuan thuy, xuan thuy cau giay")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Khóa ngoại
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Quan hệ ngược
+  channels Channel[] // Các page mặc định đổ về nhánh này
+  bookings Booking[]
+}
+
+// ==========================================
+// 3. BẢNG CHANNEL (Các kênh Fanpage FB, Zalo OA, TikTok)
+// ==========================================
+model Channel {
+  id              String  @id // Dùng chính page_id của FB hoặc oa_id của Zalo làm ID
+  platform        String // VD: "facebook", "zalo", "tiktok"
+  tenantId        String
+  defaultBranchId String? // Nếu page này chỉ dành cho 1 nhánh, gán ID nhánh vào đây
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Khóa ngoại
+  tenant        Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultBranch Branch? @relation(fields: [defaultBranchId], references: [id], onDelete: SetNull)
+
+  @@unique([id, platform]) // Đảm bảo không trùng ID trên cùng 1 nền tảng
+}
+
+// ==========================================
+// 4. BẢNG CHAT LOG (Lịch sử chat thô để Fine-tune AI)
+// ==========================================
+model ChatLog {
+  id        String @id @default(uuid())
+  sessionId String // ID của user (zalo_id, fb_psid) để gom nhóm theo phiên
+  tenantId  String
+
+  userMsg      String @db.Text // Tin nhắn khách gõ (Input)
+  currentState Json // Trạng thái bookingData lúc khách nhắn (Input)
+
+  aiIntent  String? // Intent AI bóc được (Output)
+  aiUpdates Json? // Các key AI bóc được (Output)
+
+  createdAt DateTime @default(now())
+
+  // Khóa ngoại
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  username     String?        @db.VarChar(255)
+  phone        String?        @db.VarChar(20)
+  birthday     String?        @db.VarChar(50)
+  role         Role           @default(USER)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  platformId   String         @unique
+  bookings     Booking[]
+  conversation Conversation[]
+  messages     Message[]
+
+  @@map("users")
+}
+
+model Booking {
+  id       Int     @id @default(autoincrement())
+  tenantId String
+  branchId String?
+  userId   Int     @map("userId")
+
+  peopleCount      Int?
+  checkIn          String
+  checkOut         String
+  room             Int
+  day              String
+  roundedStartTime String
+  roundedEndTime   String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Khóa ngoại
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  branch    Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([checkIn, checkOut])
+  @@map("bookings")
+}
+
+model Message {
+  id               Int           @id @default(autoincrement())
+  userId           Int?
+  type             MessageType
+  role             MessageRole
+  message          String?       @db.Text
+  messageId        String?       @db.VarChar(100)
+  from             MessageSource
+  createdAt        DateTime      @default(now()) @map("created_at")
+  direction        Direction
+  processingBy     String?
+  status           MessageStatus
+  timestamp_ms     BigInt
+  platformSenderId String
+  conversationId   Int
+  conversation     Conversation  @relation(fields: [conversationId], references: [id])
+  user             User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([messageId])
+  @@index([userId, status])
+  @@index([conversationId])
+  @@map("messages")
+}
+
+model BoxPriceInterval {
+  id           Int      @id @default(autoincrement())
+  name         String? // tên khung giờ
+  pricePerHour Int      @map("price_per_hour") // giá theo giờ
+  startTime    String   @map("start_time") // thời gian bắt đầu (định dạng HH:MM)
+  endTime      String   @map("end_time") // thời gian kết thúc (định dạng HH:MM)
+  dayType      DayType  @map("day_type") // loại ngày áp dụng
+  minPeople    Int?     @map("min_people") // số người tối thiểu
+  maxPeople    Int?     @map("max_people") // số người tối đa
+  priority     Int      @default(0) // độ ưu tiên khi áp dụng(từ nhỏ đến lớn)
+  createdAt    DateTime @default(now()) @map("created_at")
+}
+
+model Conversation {
+  id            Int                @id @default(autoincrement())
+  userId        Int
+  status        ConversationStatus @default(OPEN)
+  state         ConversationState  @default(START)
+  createdAt     DateTime           @default(now()) @map("created_at")
+  lastMessageAt DateTime           @default(now())
+  user          User               @relation(fields: [userId], references: [id])
+  messages      Message[]
+
+  @@index([userId])
+}
+
+model Intent {
+  id        Int     @id @default(autoincrement())
+  name      String
+  replyText String? @db.Text
+  isActive  Boolean @default(true)
+
+  images IntentImage[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+model IntentImage {
+  id       Int    @id @default(autoincrement())
+  intentId Int
+  url      String
+
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum DayType {
+  NORMAL // ngày thường
+  WEEKEND // cuối tuần
+  HOLIDAY // ngàu lễ
+}
+
+enum MessageType {
+  USER_MESSAGE
+  ADMIN_REPLY
+  BOT_REPLY
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum MessageSource {
+  MESSENGER
+  ZALO
+}
+
+enum MessageStatus {
+  PENDING
+  PROCESSING
+  SENT
+  REPLIED
+  FAILED
+}
+
+enum Direction {
+  INCOMING
+  OUTGOING
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+}
+
+enum ConversationState {
+  START
+  ASK_TIME
+  ASK_PEOPLE
+  ASK_OTHER_INFO
+  CONFIRM_BOOKING
+  CONFIRM_ASK_PRICE
+  BOOKED
+}
+</file>
+
+<file path="README.md">
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+
+## Description
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+## Project setup
+
+```bash
+$ npm install
+```
+
+## Compile and run the project
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## Run tests
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
+
+## Deployment
+
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
+```
+
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+
+## Resources
+
+Check out a few resources that may come in handy when working with NestJS:
+
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+</file>
+
+<file path="src/ai/ai.module.ts">
+import {  Module } from '@nestjs/common';
+import { AIService } from "./ai.service";
+
+@Module({
+    providers: [AIService],
+    exports: [AIService],
+})
+export class AIModule { }
+</file>
+
+<file path="src/ai/ai.service.ts">
+import { Injectable } from '@nestjs/common';
+import {
+  BookingData,
+  PrimaryFlow,
+  SessionStatus,
+  SubSessionStatus,
+} from 'src/queue/interfaces';
+
+export interface AIContext {
+  tenantName: string;
+  status: SessionStatus;
+  subStatus: SubSessionStatus;
+  primaryFlow: PrimaryFlow; // "booking" | "price" | ...
+  lastAskedFields?: string[]; // Những trường vừa hỏi khách (VD: ['phone', 'checkIn'])
+  lastIntent: string | null; // Ý định của tin nhắn trước đó (VD: "ask_price", "check_availability")
+  bookingData: BookingData;
+  suggestedSlots: string[];
+}
+
+export interface AIParseResult {
+  intent: string;
+
+  updates: Partial<BookingData>;
+
+  confidence: number;
+}
+
+function normalizeMessage(message: string): string {
+  return message
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/[.,!?]/g, '');
+}
+
+const CONFIRM_KEYWORDS = [
+  'ok',
+  'oke',
+  'ok luôn',
+  'được',
+  'đc',
+  'dc',
+  'có',
+  'ừ',
+  'ừm',
+  'uh',
+  'ừ ok',
+  'vâng',
+  'vg',
+  'dạ',
+  'yes',
+  'chốt',
+  'triển',
+  'đặt đi',
+  'đặt luôn',
+  'ok đặt',
+  'ok đặt đi',
+];
+
+function isUserConfirm(message: string): boolean {
+  const msg = normalizeMessage(message);
+
+  return CONFIRM_KEYWORDS.some((k) => msg === k || msg.includes(k));
+}
+
+const REJECT_KEYWORDS = [
+  'không',
+  'ko',
+  'không nhé',
+  'ko nhé',
+  'không được',
+  'để xem lại',
+  'thôi',
+  'không đặt nữa',
+];
+
+function isUserReject(message: string): boolean {
+  const msg = normalizeMessage(message);
+
+  return REJECT_KEYWORDS.some((k) => msg.includes(k));
+}
+
+@Injectable()
+export class AIService {
+  private PRIMARY_MODEL = 'gpt-4o-mini';
+  private FALLBACK_MODEL = 'gpt-3.5-turbo';
+  private TIMEOUT = 10000;
+  private MAX_RETRY = 2;
+
+  async parse(context: AIContext, message: string): Promise<AIParseResult> {
+    // Tách riêng System Prompt (Luật) và User Message (Câu chat)
+    const systemPrompt = this.buildSystemPrompt(context);
+
+    try {
+      return await this.callModel(
+        this.PRIMARY_MODEL,
+        systemPrompt,
+        message,
+        context,
+      );
+    } catch (err: any) {
+      console.warn('Primary model failed → fallback:', err?.message);
+      return await this.callModel(
+        this.FALLBACK_MODEL,
+        systemPrompt,
+        message,
+        context,
+      );
+    }
+  }
+
+  private async callModel(
+    model: string,
+    systemPrompt: string,
+    message: string,
+    context: AIContext,
+    retry = 0,
+  ): Promise<AIParseResult> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), this.TIMEOUT);
+
+    try {
+      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: model,
+          // 🔥 THAY ĐỔI QUAN TRỌNG: Tách biệt rõ ràng System và User
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: message },
+          ],
+          temperature: 0,
+          max_tokens: 300,
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(
+          `OpenAI HTTP ${res.status}: ${JSON.stringify(errorData)}`,
+        );
+      }
+
+      const data = await res.json();
+      const text = data?.choices?.[0]?.message?.content;
+
+      if (!text) throw new Error('Empty AI response');
+
+      return this.safeJSONParse(text, context, message);
+    } catch (err: any) {
+      if (retry < this.MAX_RETRY) {
+        console.warn(`Retry AI call (${retry + 1}) - Error: ${err.message}`);
+        return this.callModel(model, systemPrompt, message, context, retry + 1);
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  private safeJSONParse(
+    text: string,
+    context: AIContext,
+    message: string,
+  ): AIParseResult {
+    console.log('Raw AI response:', text, context);
+
+    try {
+      const obj = JSON.parse(text);
+
+      if (context.subStatus === 'AWAITING_CONFIRM_SUGGESTED_SLOT') {
+        if (isUserConfirm(message)) {
+          return {
+            intent: 'update_booking',
+            updates: {
+              ...obj.updates,
+              checkIn: context['suggestedSlots']?.[0] || obj.updates.checkIn, // Ưu tiên slot gợi ý nếu có
+            },
+            confidence: 1,
+          };
+        } else if (isUserReject(message)) {
+          return {
+            intent: 'cancel',
+            updates: obj.updates ?? {},
+            confidence: 1,
+          };
+        }
+      }
+
+      return {
+        intent: obj.intent ?? 'other',
+        updates: obj.updates ?? {},
+        confidence: obj.confidence ?? 0,
+      };
+    } catch (e) {
+      console.error('JSON parse fail:', text);
+      return { intent: 'other', updates: {}, confidence: 0 };
+    }
+  }
+
+  // 🔥 XÂY DỰNG LẠI SYSTEM PROMPT (Thêm ví dụ Few-shot)
+  private buildSystemPrompt(context: AIContext): string {
+    // Lọc bỏ các trường null để tiết kiệm token
+    const compactData = Object.fromEntries(
+      Object.entries(context.bookingData).filter(([_, v]) => v != null),
+    );
+
+    return `Role: Karaoke Booking Intent Parser.
+Task: Output JSON {"intent": string, "updates": object, "confidence": number}.
+
+CONTEXT:
+Status: ${context.status}
+PrimaryFlow: ${context.primaryFlow}
+LastIntent: ${context.lastIntent || 'none'}
+LastAsked: ${context.lastAskedFields?.join(',') || 'none'}
+Data: ${JSON.stringify(compactData)}
+
+INTENTS:
+- ask_price: asking price/promo.
+- check_availability: checking room status.
+- booking: requesting to book.
+- update_booking: providing booking info.
+- cancel: cancelling booking.
+- other: irrelevant.
+
+RULES:
+1. Extract ONLY if clear:
+- name: proper name (not pronouns)
+- phone: 9-11 digits
+- people: number (not from "1 phòng")
+- branch: location
+- checkIn/checkOut: raw time text
+
+2. TIME RULES (CRITICAL):
+- Contains "nữa" → checkIn
+- Has ["hát","chơi","thuê"] → duration
+- "7h","7r","7h30","19h" → checkIn
+- Only 1 time → checkIn
+- NEVER treat "7r","7h30" as duration
+
+3. RAW DATA:
+If only data:
+- follow LastIntent
+- else → update_booking
+
+4. VAGUE:
+Map to LastAsked if valid
+
+5. CONFIDENCE:
+clear=0.9+, unsure<0.7
+
+EXAMPLES:
+
+"7h hát 2 tiếng"
+→ {"intent":"update_booking","updates":{"checkIn":"7h","duration":"2 tiếng"},"confidence":0.95}
+
+"2 tiếng nữa"
+→ {"intent":"update_booking","updates":{"checkIn":"2 tiếng nữa"},"confidence":0.9}
+
+"3 người"
+→ {"intent":"update_booking","updates":{"people":3},"confidence":0.95}
+
+JSON ONLY.`;
+  }
+}
+</file>
+
+<file path="src/app.controller.spec.ts">
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+describe('AppController', () => {
+  let appController: AppController;
+
+  beforeEach(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      controllers: [AppController],
+      providers: [AppService],
+    }).compile();
+
+    appController = app.get<AppController>(AppController);
+  });
+
+  describe('root', () => {
+    it('should return "Hello World!"', () => {
+      expect(appController.getHello()).toBe('Hello World!');
+    });
+  });
+});
+</file>
+
+<file path="src/app.controller.ts">
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+}
+</file>
+
+<file path="src/app.module.ts">
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PrismaModule } from '../prisma/prisma.module';
+import { MessengerModule } from './messenger/messenger.module';
+import { QueueModule } from './queue/queue.module';
+import { IntentModule } from './intent/intent.module';
+import { R2Module } from './r2/r2.module';
+import { BookingModule } from './booking/booking.module';
+
+@Module({
+  imports: [PrismaModule, MessengerModule, QueueModule, IntentModule, R2Module, BookingModule],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+</file>
+
+<file path="src/app.service.ts">
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AppService {
+  getHello(): string {
+    return 'Hello World!';
+  }
+}
+</file>
+
+<file path="src/booking/booking.controller.ts">
+import { Controller, Post, Body, Get } from "@nestjs/common"
+import { BookingQueue } from "./booking.queue"
+import { BookingService } from "./booking.service"
+
+@Controller("booking")
+export class BookingController {
+  constructor(
+    private bookingQueue: BookingQueue,
+    private bookingService: BookingService
+  ) {}
+
+  @Post()
+  async create(@Body() body: any) {
+    await this.bookingQueue.addCreateBookingJob(body)
+
+    return {
+      status: "queued",
+    }
+  }
+
+  @Get()
+  async getAll() {
+    return this.bookingService.getAllBookings()
+  }
+}
+</file>
+
+<file path="src/booking/booking.gateway.ts">
+import { OnModuleInit } from "@nestjs/common"
+import {
+    WebSocketGateway,
+    WebSocketServer,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+} from "@nestjs/websockets"
+import Redis from "ioredis"
+import { Server, Socket } from "socket.io"
+
+@WebSocketGateway({
+    cors: true,
+})
+export class BookingGateway
+    implements OnModuleInit {
+    constructor() {
+        console.log("🔥 BookingGateway loaded")
+    }
+    @WebSocketServer()
+    server: Server
+
+    async onModuleInit() {
+        const sub = new Redis()
+        console.log("🚀 Gateway init")
+        await sub.subscribe("booking.created", (err, count) => {
+            if (err) {
+                console.error("Failed to subscribe: ", err)
+            } else {
+                console.log(`Subscribed successfully! This client is currently subscribed to ${count} channels.`)
+            }
+        })
+
+        await sub.subscribe("booking.updated", (err, count) => {
+            if (err) {
+                console.error("Failed to subscribe: ", err)
+            } else {
+                console.log(`Subscribed successfully! This client is currently subscribed to ${count} channels.`)
+            }
+        })
+
+        sub.on("message", (channel, message) => {
+            console.log("Received message on channel:", channel)
+            if (channel === "booking.created") {
+                const data = JSON.parse(message)
+                this.server.emit("booking_created", data)
+            }else if(channel === "booking.updated") {
+                const data = JSON.parse(message)
+                this.server.emit("booking_updated", data)
+            }
+        })
+    }
+
+    handleConnection(client: Socket) {
+        console.log("Client connected:", client.id)
+    }
+
+    handleDisconnect(client: Socket) {
+        console.log("Client disconnected:", client.id)
+    }
+
+}
+</file>
+
+<file path="src/booking/booking.module.ts">
+// booking.module.ts
+
+import { Module } from "@nestjs/common"
+import { BookingController } from "./booking.controller"
+import { BookingGateway } from "./booking.gateway"
+import { BookingCoreModule } from "./BookingCoreModule.module"
+
+@Module({
+    imports: [BookingCoreModule],
+    controllers: [BookingController],
+    providers: [BookingGateway],
+})
+export class BookingModule {
+    constructor() {
+        console.log("🔥 BookingModule loaded")
+    }
+}
+</file>
+
+<file path="src/booking/booking.queue.ts">
+import { Injectable } from "@nestjs/common"
+import { Queue } from "bullmq"
+
+@Injectable()
+export class BookingQueue {
+  private queue: Queue
+
+  constructor() {
+    this.queue = new Queue("booking", {
+      connection: {
+        host: "localhost",
+        port: 6379,
+      },
+    })
+  }
+
+  async addCreateBookingJob(data: any) {
+    try{
+
+        await this.queue.add(
+          "create-booking", // 👈 job name
+          data,
+          {
+            attempts: 3, // retry nếu fail
+            backoff: {
+              type: "exponential",
+              delay: 2000, 
+            },
+            removeOnComplete: false,
+            removeOnFail: false,
+            
+          }
+        )
+    }catch(err) {
+        return console.error('Error adding job to queue:', err) // Debug log
+    }
+  }
+}
+</file>
+
+<file path="src/booking/booking.service.ts">
+import { Injectable } from "@nestjs/common"
+import { PrismaService } from "prisma/prisma.service"
+
+@Injectable()
+export class BookingService {
+  constructor(private prisma: PrismaService) {}
+
+  async createBooking(data: any) {
+    return this.prisma.booking.create({ data })
+  }
+
+  async getAllBookings(day?: string) {
+    return this.prisma.booking.findMany({
+        where: {
+            day: day
+        },
+        orderBy: {
+            room: 'asc'
+        }
+    })
+  }
+
+  async checkBookingInDay(day: string, userId: number) {
+    return this.prisma.booking.findMany({
+      where: {
+        day: day,
+        userId: userId
+      }
+    })
+  }
+
+  async updateBooking(bookingId: number, data: any) {
+    return this.prisma.booking.update({
+      where: { id: bookingId },
+      data
+    })
+  }
+
+  async updateConversationId( conversationId: number) {
+
+    return this.prisma.conversation.update({
+        where: { id: conversationId },
+        data: { state: "CONFIRM_BOOKING", status: "CLOSED" }
+      })
+
+  }
+}
+</file>
+
+<file path="src/booking/booking.worker.ts">
+import * as dotenv from "dotenv"
+dotenv.config()
+
+import { NestFactory } from "@nestjs/core"
+import { Worker } from "bullmq"
+
+import { BookingService } from "./booking.service"
+import Redis from "ioredis"
+import { BookingCoreModule } from "./BookingCoreModule.module"
+import { checkAndBook } from "./common"
+import dayjs from "dayjs"
+import axios from "axios"
+
+const pub = new Redis()
+
+async function bootstrap() {
+    const app = await NestFactory.createApplicationContext(BookingCoreModule)
+
+    const bookingService = app.get(BookingService)
+
+    new Worker(
+        "booking",
+        async (job) => {
+            try {
+                const checkBooking = await bookingService.checkBookingInDay(job.data.day, job.data.userId)
+                console.log("Processing booking job:", job.data, checkBooking)
+                if (checkBooking.length > 0) {
+                    const updatedBooking = await bookingService.updateBooking(checkBooking[0].id, {
+                        ...checkBooking[0],
+                        peopleCount: job.data.peopleCount,
+                        checkIn: job.data.startTime,
+                        checkOut: job.data.endTime,
+                        roundedStartTime: job.data.roundedStartTime,
+                        roundedEndTime: job.data.roundedEndTime,
+                        day: job.data.day,
+                        room: job.data.room!,
+                    })
+                    await pub.publish(
+                        "booking.updated",
+                        JSON.stringify({ currentBooking: checkBooking[0], updatedBooking: {...updatedBooking, ...job.data} })
+                    )
+                } else {
+                    const newBooking = await bookingService.createBooking({
+                        peopleCount: job.data.peopleCount,
+                        checkIn: job.data.startTime,
+                        checkOut: job.data.endTime,
+                        roundedStartTime: job.data.roundedStartTime,
+                        roundedEndTime: job.data.roundedEndTime,
+                        day: job.data.day,
+                        room: job.data.room!,
+                        user: { connect: { id: job.data.userId } },
+                        tenant: { connect: { id: job.data.tenantId } },
+                        
+                    })
+                    await pub.publish(
+                        "booking.created",
+                        JSON.stringify({ ...job.data, ...newBooking })
+                    )
+                }
+            } catch (err) {
+                console.error("Error processing booking job:", err)
+                // return {
+                //         success: false,
+                //         message: err.message,
+                //         booking: err,
+                //     }
+                throw err // Ensure BullMQ knows the job failed
+            }
+        },
+        {
+            connection: {
+                host: "localhost",
+                port: 6379,
+            },
+        }
+    )
+
+    console.log("✅ Booking worker started")
+}
+
+bootstrap()
+</file>
+
+<file path="src/booking/BookingCoreModule.module.ts">
+// booking-core.module.ts
+
+import { Module } from "@nestjs/common"
+import { BookingService } from "./booking.service"
+import { BookingQueue } from "./booking.queue"
+import { PrismaModule } from "prisma/prisma.module"
+import { MemoryModule } from "src/memory/memory.module"
+
+@Module({
+    imports: [PrismaModule, MemoryModule],
+  providers: [BookingService, BookingQueue],
+  exports: [BookingService, BookingQueue],
+})
+export class BookingCoreModule {}
+</file>
+
+<file path="src/booking/common.ts">
+import dayjs from "dayjs"
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import customParseFormat from "dayjs/plugin/customParseFormat"
+
+dayjs.extend(customParseFormat)
+dayjs.extend(utc);
+dayjs.extend(timezone);
+// Thiết lập múi giờ mặc định (Asia/Ho_Chi_Minh ~ GMT+7)
+dayjs.tz.setDefault("Asia/Ho_Chi_Minh");
+
+interface Order {
+    startTime: string
+    endTime: string
+}
+
+interface RoomBooking {
+    room: number
+    orders: Order[]
+}
+
+interface BookingResult {
+    success: boolean
+    roomId?: number
+    message: string
+    nearestAvailable?: NearestAvailable[]
+}
+
+interface NearestAvailable {
+    roomId: number
+    startTime: string // ISO string
+    endTime: string   // ISO string
+    day: string       // "DD/MM/YYYY"
+    _ts: number       // timestamp để sort
+}
+
+
+// ───────────────────────────── Main ─────────────────────────────
+
+const NIGHT_CUTOFF = 6 // 6h sáng
+
+function normalizeToBusinessDay(baseDay: string, time: string): dayjs.Dayjs {
+    let dt = dayjs(`${baseDay} ${time}`, "DD/MM/YYYY HH:mm")
+
+    if (dt.hour() < NIGHT_CUTOFF) {
+        dt = dt.add(1, "day")
+    }
+
+    return dt
+}
+
+function parseDateTime(day: string, time: string): dayjs.Dayjs {
+    // day: DD/MM/YYYY
+    // time: HH:mm
+    return dayjs(`${day} ${time}`, "DD/MM/YYYY HH:mm")
+}
+
+function checkAndBook(
+    existingBookings: RoomBooking[],
+    requestedStart: string, // "HH:mm"
+    requestedEnd: string,   // "HH:mm"
+    day: string,            // "DD/MM/YYYY"
+    roomIds: number[]
+): BookingResult {
+
+    const reqStart = normalizeToBusinessDay(day, requestedStart)
+    let reqEnd = normalizeToBusinessDay(day, requestedEnd)
+
+    // xử lý qua đêm (vd 23:00 → 02:00)
+    if (reqEnd.isBefore(reqStart)) {
+        reqEnd = reqEnd.add(1, "day")
+    }
+
+    const duration = reqEnd.diff(reqStart, "minute")
+
+    const targetRooms = existingBookings.map(room => ({
+        ...room,
+        orders: room.orders.map(order => {
+            let start = normalizeToBusinessDay(day, order.startTime)
+            let end = normalizeToBusinessDay(day, order.endTime)
+
+            if (end.isBefore(start)) {
+                end = end.add(1, "day")
+            }
+
+            return {
+                startTime: start.toISOString(),
+                endTime: end.toISOString()
+            }
+        })
+    })).filter((r) => roomIds.includes(r.room))
+
+    const bookedRoomIds = targetRooms.map((r) => r.room)
+    const emptyRoomIds = roomIds.filter((id) => !bookedRoomIds.includes(id))
+
+    // check phòng có slot
+    for (const roomBooking of targetRooms) {
+        if (isRoomAvailable(roomBooking.orders, reqStart, reqEnd)) {
+            return {
+                success: true,
+                roomId: roomBooking.room,
+                message: `Đặt phòng thành công! Phòng ${roomBooking.room} từ ${reqStart.format("HH:mm DD/MM/YYYY")} đến ${reqEnd.format("HH:mm DD/MM/YYYY")}`,
+            }
+        }
+    }
+
+    // phòng chưa có booking
+    if (emptyRoomIds.length > 0) {
+        return {
+            success: true,
+            roomId: emptyRoomIds[0],
+            message: `Đặt phòng thành công! Phòng ${emptyRoomIds[0]} từ ${reqStart.format("HH:mm DD/MM/YYYY")} đến ${reqEnd.format("HH:mm DD/MM/YYYY")}`,
+        }
+    }
+
+    // tìm nearest
+    const nearestAvailable = targetRooms
+        .map((roomBooking) => findNearestAvailable(roomBooking, reqStart, duration))
+        .filter((result): result is NearestAvailable => result !== null)
+        .sort((a, b) => a._ts - b._ts)
+
+    return {
+        success: false,
+        message: "Không còn phòng trống trong khung giờ này.",
+        nearestAvailable,
+    }
+}
+
+// ───────────────────────────── Availability Check ─────────────────────────────
+
+function isRoomAvailable(
+    orders: Order[],
+    newStart: dayjs.Dayjs,
+    newEnd: dayjs.Dayjs
+): boolean {
+    return orders.every((order) => {
+        const existStart = dayjs(order.startTime)
+        const existEnd = dayjs(order.endTime)
+
+        // Không conflict khi: newEnd <= existStart || newStart >= existEnd
+        return newEnd.isBefore(existStart) || newEnd.isSame(existStart)
+            || newStart.isAfter(existEnd) || newStart.isSame(existEnd)
+    })
+}
+
+// ───────────────────────────── Find Nearest ─────────────────────────────
+
+function findNearestAvailable(
+    roomBooking: RoomBooking,
+    requestedStart: dayjs.Dayjs,
+    duration: number
+): NearestAvailable | null {
+
+    const candidates: dayjs.Dayjs[] = [
+        requestedStart,
+        ...roomBooking.orders.map((o) => snapToSlot(dayjs(o.endTime))),
+    ]
+
+    const sortedCandidates = candidates
+        .filter((c) => !c.isBefore(requestedStart))
+        .sort((a, b) => a.diff(b))
+
+    for (const candidateStart of sortedCandidates) {
+        const candidateEnd = candidateStart.add(duration, "minute")
+
+        if (isRoomAvailable(roomBooking.orders, candidateStart, candidateEnd)) {
+            return {
+                roomId: roomBooking.room,
+                startTime: candidateStart.format("HH:mm"),
+                endTime: candidateEnd.format("HH:mm"),
+                day: candidateStart.format("DD/MM/YYYY"),
+                _ts: candidateStart.valueOf()
+            }
+        }
+    }
+
+    return null
+}
+
+// ───────────────────────────── Helpers ─────────────────────────────
+
+// Làm tròn lên slot 30 phút gần nhất
+function snapToSlot(d: dayjs.Dayjs): dayjs.Dayjs {
+    const minutes = d.minute()
+
+    if (minutes === 0 || minutes === 30) return d.second(0).millisecond(0)
+    if (minutes < 30) return d.minute(30).second(0).millisecond(0)
+    return d.add(1, "hour").minute(0).second(0).millisecond(0)
+}
+
+export { checkAndBook }
+</file>
+
+<file path="src/chatbot.price.e2e.spec.ts">
+import { findPriceRule } from "../src/conversation/conversation.service"
+
+interface PriceRule {
+  id: number
+  name: string
+  price_per_hour: number
+  start_time: string
+  end_time: string
+  day_type: "NORMAL" | "WEEKEND"
+  min_people: number
+  max_people: number
+}
+
+const rules: PriceRule[] = [
+
+{ id:1,name:"Box 1 người",price_per_hour:15000,start_time:"06:00",end_time:"13:59",day_type:"NORMAL",min_people:1,max_people:1 },
+{ id:2,name:"Box 1 người",price_per_hour:30000,start_time:"14:00",end_time:"17:59",day_type:"NORMAL",min_people:1,max_people:1 },
+{ id:3,name:"Box 1 người",price_per_hour:60000,start_time:"18:00",end_time:"05:59",day_type:"NORMAL",min_people:1,max_people:1 },
+
+{ id:4,name:"Box 2-3 người",price_per_hour:25000,start_time:"06:00",end_time:"13:59",day_type:"NORMAL",min_people:2,max_people:3 },
+{ id:5,name:"Box 2-3 người",price_per_hour:45000,start_time:"14:00",end_time:"17:59",day_type:"NORMAL",min_people:2,max_people:3 },
+{ id:6,name:"Box 2-3 người",price_per_hour:85000,start_time:"18:00",end_time:"05:59",day_type:"NORMAL",min_people:2,max_people:3 },
+
+{ id:7,name:"Box 4-6 người",price_per_hour:30000,start_time:"06:00",end_time:"13:59",day_type:"NORMAL",min_people:4,max_people:6 },
+{ id:8,name:"Box 4-6 người",price_per_hour:55000,start_time:"14:00",end_time:"17:59",day_type:"NORMAL",min_people:4,max_people:6 },
+{ id:9,name:"Box 4-6 người",price_per_hour:115000,start_time:"18:00",end_time:"05:59",day_type:"NORMAL",min_people:4,max_people:6 },
+
+{ id:10,name:"Box 7-10 người",price_per_hour:45000,start_time:"06:00",end_time:"13:59",day_type:"NORMAL",min_people:7,max_people:10 },
+{ id:11,name:"Box 7-10 người",price_per_hour:65000,start_time:"14:00",end_time:"17:59",day_type:"NORMAL",min_people:7,max_people:10 },
+{ id:12,name:"Box 7-10 người",price_per_hour:135000,start_time:"18:00",end_time:"05:59",day_type:"NORMAL",min_people:7,max_people:10 },
+
+{ id:13,name:"Box 1 người",price_per_hour:30000,start_time:"06:00",end_time:"13:59",day_type:"WEEKEND",min_people:1,max_people:1 },
+{ id:14,name:"Box 1 người",price_per_hour:60000,start_time:"14:00",end_time:"17:59",day_type:"WEEKEND",min_people:1,max_people:1 },
+{ id:15,name:"Box 1 người",price_per_hour:90000,start_time:"18:00",end_time:"05:59",day_type:"WEEKEND",min_people:1,max_people:1 },
+
+{ id:16,name:"Box 2-3 người",price_per_hour:45000,start_time:"06:00",end_time:"13:59",day_type:"WEEKEND",min_people:2,max_people:3 },
+{ id:17,name:"Box 2-3 người",price_per_hour:65000,start_time:"14:00",end_time:"17:59",day_type:"WEEKEND",min_people:2,max_people:3 },
+{ id:18,name:"Box 2-3 người",price_per_hour:90000,start_time:"18:00",end_time:"05:59",day_type:"WEEKEND",min_people:2,max_people:3 },
+
+{ id:19,name:"Box 4-6 người",price_per_hour:55000,start_time:"06:00",end_time:"13:59",day_type:"WEEKEND",min_people:4,max_people:6 },
+{ id:20,name:"Box 4-6 người",price_per_hour:75000,start_time:"14:00",end_time:"17:59",day_type:"WEEKEND",min_people:4,max_people:6 },
+{ id:21,name:"Box 4-6 người",price_per_hour:120000,start_time:"18:00",end_time:"05:59",day_type:"WEEKEND",min_people:4,max_people:6 },
+
+{ id:22,name:"Box 7-10 người",price_per_hour:60000,start_time:"06:00",end_time:"13:59",day_type:"WEEKEND",min_people:7,max_people:10 },
+{ id:23,name:"Box 7-10 người",price_per_hour:85000,start_time:"14:00",end_time:"17:59",day_type:"WEEKEND",min_people:7,max_people:10 },
+{ id:24,name:"Box 7-10 người",price_per_hour:150000,start_time:"18:00",end_time:"05:59",day_type:"WEEKEND",min_people:7,max_people:10 }
+
+]
+
+function isWeekendCase(i:number){
+  return i % 2 === 0
+}
+
+function generateCases(){
+
+  const times = [
+    "06:00","07:30","09:00","11:00","13:30",
+    "14:00","15:30","16:45","17:59",
+    "18:00","19:30","21:00","22:30","23:59",
+    "00:30","02:00","04:30","05:59"
+  ]
+
+  const peoples = [1,2,3,4,5,6,7,8,9,10]
+
+  const cases:any[] = []
+
+  for(const t of times){
+
+    for(const p of peoples){
+
+      cases.push({
+        time:t,
+        people:p,
+        weekend:isWeekendCase(p)
+      })
+
+      if(cases.length >= 100) return cases
+    }
+  }
+
+  return cases
+}
+
+describe("findPriceRule 100 cases",()=>{
+
+  const cases = generateCases()
+
+  it("should match correct rule",()=>{
+
+    for(const c of cases){
+
+      const rule = findPriceRule(
+        rules,
+        c.time,
+        c.people,
+        c.weekend
+      )
+
+      console.log(
+        c.time,
+        c.people,
+        c.weekend ? "weekend":"normal",
+        "→",
+        rule?.name,
+        rule?.price_per_hour
+      )
+
+      expect(rule).not.toBeNull()
+
+    }
+
+  })
+
+})
+</file>
+
+<file path="src/common.spec.ts">
+import dayjs from "dayjs"
+import { parseVietnameseTime } from "./common"
+
+describe("Vietnamese Time Parser", () => {
+
+  const tests: [string, string, number | null][] = [
+
+    // =================
+    // HÔM NAY
+    // =================
+    ["tối nay", "20:00", 0],
+    ["chiều nay", "17:00", 0],
+    ["sáng nay", "09:00", 0],
+    ["hôm nay 21h", "21:00", 0],
+    ["nay 19h", "19:00", 0],
+    ["tối nay 8h", "20:00", 0],
+    ["chiều nay 5h", "17:00", 0],
+    ["sáng nay 8h", "08:00", 0],
+    ["nay 6h sáng", "06:00", 0],
+    ["nay 7h tối", "19:00", 0],
+
+    // =================
+    // HÔM NAY FUZZY
+    // =================
+    ["hôm nay khoảng 7h", "07:00", 0],
+    ["hôm nay tầm 8h", "08:00", 0],
+
+    // =================
+    // MAI
+    // =================
+    ["mai 7h", "07:00", 1],
+    ["sáng mai", "09:00", 1],
+    ["chiều mai", "17:00", 1],
+    ["tối mai", "20:00", 1],
+    ["mai 19h", "19:00", 1],
+    ["mai tầm 8h", "08:00", 1],
+    ["mai khoảng 7h", "07:00", 1],
+    ["mai 7h tối", "19:00", 1],
+    ["mai 8h sáng", "08:00", 1],
+    ["mai 5h chiều", "17:00", 1],
+    ["mai 6h tối", "18:00", 1],
+    ["mai lúc 7h", "07:00", 1],
+    ["mai lúc 7h tối", "19:00", 1],
+
+    // =================
+    // ĐẢO VỊ TRÍ
+    // =================
+    ["7h tối mai", "19:00", 1],
+    ["8h sáng mai", "08:00", 1],
+    ["7h mai tối", "19:00", 1],
+    ["tối mai 7h", "19:00", 1],
+    ["sáng mai 8h", "08:00", 1],
+    ["chiều mai 5h", "17:00", 1],
+
+    // =================
+    // MỐT
+    // =================
+    ["mốt 8h", "08:00", 2],
+    ["sáng mốt", "09:00", 2],
+    ["tối mốt", "20:00", 2],
+    ["mốt 7h tối", "19:00", 2],
+    ["mốt 8h sáng", "08:00", 2],
+    ["chiều mốt", "17:00", 2],
+
+    // =================
+    // KIA
+    // =================
+    ["kia 7h", "07:00", 3],
+    ["tối kia", "20:00", 3],
+    ["sáng kia", "09:00", 3],
+    ["kia 8h tối", "20:00", 3],
+    ["kia 6h chiều", "18:00", 3],
+
+    // =================
+    // WEEKDAY
+    // =================
+    ["thứ 2 7h", "07:00", null],
+    ["thứ 3 19h", "19:00", null],
+    ["thứ 4 tối", "20:00", null],
+    ["thứ 5 7h", "07:00", null],
+    ["thứ 6 8h", "08:00", null],
+    ["thứ 6 19h", "19:00", null],
+    ["thứ 7 tối", "20:00", null],
+    ["thứ 7 8h sáng", "08:00", null],
+    ["cn 7h", "07:00", null],
+    ["cn 7h tối", "19:00", null],
+    ["t7 20h", "20:00", null],
+    ["t6 18h", "18:00", null],
+    ["t2 7h", "07:00", null],
+
+    // =================
+    // WEEKEND
+    // =================
+    ["cuối tuần", "20:00", null],
+    ["cuối tuần 7h", "07:00", null],
+    ["cuối tuần 8h tối", "20:00", null],
+    ["cuối tuần buổi tối", "20:00", null],
+
+    // =================
+    // NGÀY CỤ THỂ
+    // =================
+    ["21/3 19h", "19:00", null],
+    ["21/3 7h", "07:00", null],
+    ["21/3 tối", "20:00", null],
+    ["5-4 18h", "18:00", null],
+    ["5-4 7h tối", "19:00", null],
+    ["10/12 8h sáng", "08:00", null],
+    ["1/1 9h", "09:00", null],
+
+    // =================
+    // MINUTE
+    // =================
+    ["7:30", "07:30", 0],
+    ["7h30", "07:30", 0],
+    ["8:15 tối", "20:15", 0],
+    ["6h45 sáng", "06:45", 0],
+
+    // =================
+    // CHRONO FALLBACK
+    // =================
+    ["tomorrow 7pm", "19:00", 1],
+    ["today 8pm", "20:00", 0],
+    ["today 9am", "09:00", 0],
+
+    // =================
+    // CHATBOT THỰC TẾ
+    // =================
+    ["tối nay 2 người", "20:00", 0],
+    ["chiều mai 3 người", "17:00", 1],
+    ["mai tầm 7h", "07:00", 1],
+    ["cho mình đặt phòng tối nay", "20:00", 0],
+    ["tối nay đặt phòng", "20:00", 0],
+    ["mai đặt phòng 7h", "07:00", 1],
+    ["mai 7h còn phòng không", "07:00", 1],
+    ["mai 7h cho 3 người", "07:00", 1],
+    ["tối mai cho 4 người", "20:00", 1],
+    ["đặt phòng mai 8h", "08:00", 1],
+    ["mai đi hát 7h", "07:00", 1],
+
+    // =================
+    // NHIỄU SỐ
+    // =================
+    ["tối nay 3 người", "20:00", 0],
+    ["mai 7h 4 người", "07:00", 1],
+    ["mai 8h 5 người", "08:00", 1],
+    ["mai 7h 2 phòng", "07:00", 1],
+
+    // =================
+    // EDGE CASE QUAN TRỌNG
+    // =================
+    ["1h", "01:00", null],
+    ["2h", "02:00", null],
+    ["3h", "03:00", null],
+    ["4h", "04:00", null],
+    ["5h", "05:00", null],
+
+  ]
+
+  it.each(tests)(
+    "parse %s",
+    (...args: [string, string, number | null]) => {
+
+      const [text, expectedHour, addDay] = args
+
+      const result = parseVietnameseTime(text)
+
+      expect(result).not.toBeNull()
+
+      expect(result?.start).toBe(expectedHour)
+
+      if (addDay !== null) {
+
+        const date = dayjs()
+          .add(addDay, "day")
+          .format("YYYY-MM-DD")
+
+        expect(result?.date).toContain(date)
+
+      }
+
+    }
+  )
+
+})
+</file>
+
+<file path="src/common.ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const TZ = 'Asia/Ho_Chi_Minh';
+
+type TimeIntent = {
+    hour?: number;
+    minute?: number;
+    dayOffset?: number;
+    date?: number;
+    month?: number;
+    year?: number;
+    dayOfWeek?: number;
+    nextWeek?: boolean;
+    isWeekendTarget?: boolean;
+    period?: "morning" | "afternoon" | "evening";
+    absoluteTime?: dayjs.Dayjs;
+};
+
+const DAY_MAP: Record<string, number> = {
+    "chu nhat": 0, "cn": 0,
+    "thu 2": 1, "thu hai": 1, "th2": 1, "th 2": 1,
+    "thu 3": 2, "thu ba": 2, "th3": 2, "th 3": 2,
+    "thu 4": 3, "thu tu": 3, "th4": 3, "th 4": 3,
+    "thu 5": 4, "thu nam": 4, "th5": 4, "th 5": 4,
+    "thu 6": 5, "thu sau": 5, "th6": 5, "th 6": 5,
+    "thu 7": 6, "thu bay": 6, "th7": 6, "th 7": 6
+};
+
+function extractIntent(text: string, now: dayjs.Dayjs): TimeIntent {
+    let t = text
+        .toLowerCase()
+        .replace(/giowf/g, "h")
+        .replace(/giờ/g, "h")
+        .replace(/thuws/g, "thu")
+        .replace(/tieengs/g, "tieng")
+        .replace(/phuts/g, "phut")
+        .replace(/toois/g, "toi")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/(?:h|g)?\s*(ruoi|r|ruoiwx|ruoiw|ruowi|ruow)/g, "h30")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const intent: TimeIntent = {};
+
+    // 0. Cụm "nữa"
+    const relativeFutureMatch = t.match(/(\d+)\s*(phut|tieng|h)\s*nua/);
+    if (relativeFutureMatch) {
+        const amount = parseInt(relativeFutureMatch[1]!);
+        const unit = relativeFutureMatch[2];
+        let targetTime = now;
+        if (unit === "phut") targetTime = targetTime.add(amount, "minute");
+        else targetTime = targetTime.add(amount, "hour");
+        intent.absoluteTime = targetTime;
+        intent.hour = targetTime.hour();
+        intent.minute = targetTime.minute();
+        t = t.split(relativeFutureMatch[0]).join(" ");
+    }
+
+    // 1. Cụm "kém"
+    const kemMatch = t.match(/(\d{1,2})\s*(?:h|g)?\s*kem\s*(\d{1,2})/);
+    if (kemMatch) {
+        let h = parseInt(kemMatch[1]!);
+        let m = parseInt(kemMatch[2]!);
+        intent.hour = h - 1;
+        if (intent.hour === 0) intent.hour = 12; 
+        if (intent.hour < 0) intent.hour = 23;
+        intent.minute = 60 - m;
+        t = t.split(kemMatch[0]).join(" ");
+    }
+
+    // Ngày tháng cụ thể
+    const dateMatchFull = t.match(/(?:(?:ngay|mung)\s+)?(\d{1,2})\s*(?:[\/\-\.]|\s+thang\s+)\s*(\d{1,2})(?:\s*(?:[\/\-\.]|\s+nam\s+)\s*(\d{4}))?/);
+    if (dateMatchFull) {
+        intent.date = parseInt(dateMatchFull[1]!);
+        intent.month = parseInt(dateMatchFull[2]!);
+        if (dateMatchFull[3]) intent.year = parseInt(dateMatchFull[3]!);
+        t = t.split(dateMatchFull[0]).join(" "); 
+    } else {
+        const dayMatch = t.match(/(?:ngay|mung)\s+(\d{1,2})/);
+        if (dayMatch) {
+            intent.date = parseInt(dayMatch[1]!);
+            t = t.split(dayMatch[0]).join(" ");
+        }
+    }
+
+    // 2. Giờ phút (Fix: Chấp nhận bắt số trơn nều nằm giữa biên từ, VD: "trưa 10")
+    if (intent.hour === undefined && !intent.absoluteTime) {
+        const timeMatch = t.match(/\b(\d{1,2})\s*(h|g|:|)\s*(\d{1,2})?\b/);
+        if (timeMatch && timeMatch[1]) {
+            const val = parseInt(timeMatch[1]);
+            const suffix = timeMatch[2];
+            if (suffix || (val > 0 && val <= 24)) {
+                intent.hour = val;
+                intent.minute = timeMatch[3] ? parseInt(timeMatch[3]) : 0;
+                t = t.split(timeMatch[0]).join(" ");
+            }
+        }
+    }
+
+    // 4. Các Keywords 
+    if (t.includes("tuan sau")) intent.nextWeek = true;
+    if (t.includes("cuoi tuan")) intent.isWeekendTarget = true;
+
+    // Fix: Dùng regex boundary chặn bắt nhầm ngày trong tuần
+    for (const [key, val] of Object.entries(DAY_MAP)) {
+        const regex = new RegExp(`\\b${key}\\b`);
+        if (regex.test(t)) {
+            intent.dayOfWeek = val;
+            break;
+        }
+    }
+
+    // Fix: Dùng regex boundary
+    if (/\bmai\b/.test(t)) intent.dayOffset = 1;
+    if (/\b(mot|kia)\b/.test(t)) intent.dayOffset = 2;
+
+    if (/\bsang\b/.test(t)) intent.period = "morning";
+    if (/\btrua\b/.test(t)) {
+        intent.period = "morning";
+        // Fix: Trưa không có số thì auto 12:00
+        if (intent.hour === undefined) {
+            intent.hour = 12;
+            intent.minute = 0;
+        }
+    }
+    if (/\bchieu\b/.test(t)) intent.period = "afternoon";
+    if (/\btoi\b/.test(t)) intent.period = "evening";
+
+    return intent;
+}
+
+function resolveDate(intent: TimeIntent, businessNow: dayjs.Dayjs) {
+    if (intent.date) {
+        let targetMonth = intent.month ? intent.month - 1 : businessNow.month();
+        let targetYear = intent.year ? intent.year : businessNow.year();
+        let d = businessNow.year(targetYear).month(targetMonth).date(intent.date);
+
+        if (!intent.year && d.isBefore(businessNow, "day")) {
+            if (intent.month) d = d.add(1, "year");
+            else d = d.add(1, "month");
+        }
+        return d;
+    }
+
+    if (intent.isWeekendTarget) {
+        let currentDayOfWeek = businessNow.day();
+        let daysToAdd = currentDayOfWeek === 0 ? 0 : 6 - currentDayOfWeek;
+        if (intent.nextWeek) daysToAdd += 7;
+        return businessNow.add(daysToAdd, "day");
+    }
+
+    if (intent.dayOfWeek !== undefined) {
+        // Việt hóa: Đổi Chủ nhật (0) thành ngày số 7 trong tuần
+        let currentDayOfWeek = businessNow.day() === 0 ? 7 : businessNow.day();
+        let targetDayOfWeek = intent.dayOfWeek === 0 ? 7 : intent.dayOfWeek;
+
+        let daysToAdd = targetDayOfWeek - currentDayOfWeek;
+
+        // Nếu thứ đó đã qua rồi -> Mặc định là của tuần sau (+7 ngày)
+        if (daysToAdd <= 0) {
+            daysToAdd += 7;
+        }
+
+        // Nếu khách gõ chữ "tuần sau"
+        if (intent.nextWeek) {
+            // Chỉ cộng thêm 7 NẾU thứ đó vẫn chưa diễn ra trong tuần này.
+            // (Ví dụ: Thứ 6 đặt Chủ Nhật (7 > 5) -> Cộng thêm 7.
+            // Nhưng Thứ 6 đặt Thứ 2 tuần sau (1 > 5 = false) -> daysToAdd ở trên đã tự thành 3 ngày rồi, không cộng 7 nữa để tránh nhảy sang 10 ngày).
+            if (targetDayOfWeek > currentDayOfWeek) {
+                daysToAdd += 7;
+            }
+        }
+
+        return businessNow.add(daysToAdd, "day");
+    }
+
+    if (intent.dayOffset) {
+        return businessNow.add(intent.dayOffset, "day");
+    }
+
+    return businessNow;
+}
+
+function resolveTime(
+    intent: TimeIntent,
+    baseBusinessDate: dayjs.Dayjs,
+    now: dayjs.Dayjs
+) {
+    if (intent.absoluteTime) return intent.absoluteTime;
+    if (intent.hour === undefined) return null;
+
+    let hour = intent.hour;
+    let minute = intent.minute ?? 0;
+
+    if (hour === 24) hour = 0;
+    
+    if (hour === 12) {
+        if (intent.period === "evening") {
+            hour = 0; 
+        } else if (intent.period === "morning") {
+            hour = 12; 
+        } else {
+            hour = now.hour() >= 12 ? 0 : 12;
+        }
+    }
+
+    if (intent.period === "afternoon" || intent.period === "evening") {
+        if (hour < 12) hour += 12;
+    }
+
+    if (!intent.period && hour >= 1 && hour <= 6) {
+        let pmHour = hour + 12;
+        // Chỉ tự động chuyển sang giờ chiều nếu thời điểm hiện tại CHƯA VƯỢT QUÁ giờ chiều đó.
+        // VD: 12h trưa khách đặt "3h" -> hiểu là 15h.
+        // NHƯNG 17h chiều khách đặt "3h" -> hiểu là 3h sáng đêm nay (vì 15h đã qua rồi).
+        if (now.hour() >= 6 && now.hour() <= pmHour) {
+            hour = pmHour;
+        }
+    }
+
+    let result = baseBusinessDate;
+    
+    if (hour < 6) {
+        result = result.add(1, "day");
+    }
+    result = result.hour(hour).minute(minute).second(0).millisecond(0);
+
+    // ===== LUẬT NIGHTLIFE (7h - 11h) =====
+    if (!intent.period && hour >= 7 && hour <= 11) {
+        if (now.hour() >= 0 && now.hour() < 6) {
+            result = result.year(now.year()).month(now.month()).date(now.date());
+        } 
+        else {
+            // Nếu bản AM (sáng) đã trôi qua ở hiện tại
+            if (result.isBefore(now) || result.isSame(now)) {
+                let pmTime = result.add(12, "hour");
+                
+                // Kiểm tra xem bản PM (tối) đã diễn ra chưa?
+                // Nếu chưa (pmTime nằm ở tương lai) -> Khách đang muốn đặt tối nay!
+                if (!pmTime.isBefore(now)) {
+                    result = pmTime;
+                }
+            }
+        }
+    }
+
+    const hasExplicitDate = intent.dayOffset !== undefined || intent.date !== undefined || intent.dayOfWeek !== undefined || intent.isWeekendTarget !== undefined;
+
+    if (!hasExplicitDate) {
+        if (result.isBefore(now) || result.isSame(now)) {
+            result = result.add(1, "day");
+        }
+    }
+
+    return result; 
+}
+
+export function parseBookingTime(text: string, duration: number = 1) {
+    const now = dayjs().tz(TZ);
+    const intent = extractIntent(text, now.clone());
+
+    const businessNow = now.hour() < 6 ? now.clone().subtract(1, 'day') : now.clone();
+    const baseBusinessDate = resolveDate(intent, businessNow.clone());
+    const finalCalendarTime = resolveTime(intent, baseBusinessDate.clone(), now.clone());
+
+    // Xử lý trường hợp không có giờ
+    if (!finalCalendarTime) {
+        return {
+            date: baseBusinessDate.format("DD/MM/YYYY"),
+            time: null,
+            roundedTime: null, // Thêm dòng này
+            endDate: baseBusinessDate.format("DD/MM/YYYY"),
+            endTime: null,
+            roundedEndTime: null, // Thêm dòng này
+            isWeekend: [0, 5, 6].includes(baseBusinessDate.day()),
+            debug: intent
+        };
+    }
+
+    // ===== HÀM HELPER: LÀM TRÒN 30 PHÚT =====
+    const roundToNearest30 = (timeObj: dayjs.Dayjs) => {
+        const m = timeObj.minute();
+        if (m < 15) {
+            return timeObj.clone().minute(0).second(0).millisecond(0);
+        } else if (m < 45) {
+            return timeObj.clone().minute(30).second(0).millisecond(0);
+        } else {
+            return timeObj.clone().add(1, 'hour').minute(0).second(0).millisecond(0);
+        }
+    };
+
+    // TÍNH TOÁN GIỜ BẮT ĐẦU
+    let finalBusinessDate = finalCalendarTime.clone();
+    if (finalCalendarTime.hour() < 6) {
+        finalBusinessDate = finalCalendarTime.subtract(1, "day");
+    }
+    const roundedStart = roundToNearest30(finalCalendarTime);
+
+    // TÍNH TOÁN GIỜ KẾT THÚC (+duration h)
+    const endCalendarTime = finalCalendarTime.add(duration * 60, "minute");
+    let endBusinessDate = endCalendarTime.clone();
+    if (endCalendarTime.hour() < 6) {
+        endBusinessDate = endCalendarTime.subtract(1, "day");
+    }
+    const roundedEnd = roundToNearest30(endCalendarTime);
+
+    return {
+        date: finalBusinessDate.format("DD/MM/YYYY"),
+        time: finalCalendarTime.format("HH:mm"),
+        roundedTime: roundedStart.format("HH:mm"),       // Trả về Giờ bắt đầu đã làm tròn
+
+        endDate: endBusinessDate.format("DD/MM/YYYY"),
+        endTime: endCalendarTime.format("HH:mm"),
+        roundedEndTime: roundedEnd.format("HH:mm"),      // Trả về Giờ kết thúc đã làm tròn
+
+        isWeekend: [0, 5, 6].includes(finalBusinessDate.day()),
+        debug: intent
+    };
+}
+</file>
+
+<file path="src/conversation/conversation-session.service.ts">
+// src/conversation/conversation-session.service.ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+
+const CONVERSATION_TIMEOUT = 12 * 60 * 60 * 1000 // 12 giờ
+
+@Injectable()
+export class ConversationSessionService {
+  constructor(private prisma: PrismaService) { }
+
+  async getOrCreate(userId: number) {
+
+    const conversation = await this.prisma.conversation.findFirst({
+      where: {
+        userId,
+        status: "OPEN"
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    })
+
+    if (!conversation) {
+      return this.createConversation(userId)
+    }
+
+    const now = new Date().getTime()
+    const last = new Date(conversation.lastMessageAt).getTime()
+
+    const expired = now - last > CONVERSATION_TIMEOUT
+
+    if (expired) {
+
+      await this.prisma.conversation.update({
+        where: { id: conversation.id },
+        data: { status: "CLOSED" }
+      })
+
+      return this.createConversation(userId)
+    }
+
+    return conversation
+  }
+
+  async createConversation(userId: number) {
+
+    return this.prisma.conversation.create({
+      data: {
+        userId,
+        state: "START",
+        status: "OPEN",
+        lastMessageAt: new Date()
+      }
+    })
+  }
+
+  async touchConversation(conversationId: number) {
+
+    await this.prisma.conversation.update({
+      where: { id: conversationId },
+      data: { lastMessageAt: new Date() }
+    })
+  }
+}
+</file>
+
+<file path="src/conversation/conversation.module.ts">
+import { forwardRef, Module } from '@nestjs/common';
+import { ConversationService } from "./conversation.service";
+import { PrismaModule } from '../../prisma/prisma.module';
+import { MessengerModule } from 'src/messenger/messenger.module';
+import { MemoryModule } from 'src/memory/memory.module';
+import { AIModule } from 'src/ai/ai.module';
+import { ConversationSessionService } from './conversation-session.service';
+import { BookingCoreModule } from 'src/booking/BookingCoreModule.module';
+
+@Module({
+    imports: [
+        PrismaModule,
+        MemoryModule,
+        AIModule,
+        BookingCoreModule,
+        forwardRef(() => MessengerModule)
+    ],
+    providers: [ConversationService, ConversationSessionService],
+    exports: [ConversationService, ConversationSessionService],
+})
+export class ConversationModule { }
+</file>
+
+<file path="src/conversation/conversation.service.ts">
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { MemoryService } from 'src/memory/memory.service';
+import { parseBookingTime } from 'src/common';
+import { BookingQueue } from 'src/booking/booking.queue';
+import { platform } from 'os';
+import { checkAndBook } from 'src/booking/common';
+import dayjs from 'dayjs';
+import { SessionState } from 'http2';
+import {
+  BookingData,
+  KaraokeSessionState,
+  PrimaryFlow,
+  SessionStatus,
+} from 'src/queue/interfaces';
+import { AIParseResult } from 'src/ai/ai.service';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+export interface PriceRule {
+  id: number;
+  name: string;
+  price_per_hour: number;
+  start_time: string;
+  end_time: string;
+  day_type: 'NORMAL' | 'WEEKEND';
+  min_people: number;
+  max_people: number;
+}
+
+export interface ConversationReply {
+  textReply: string | null;
+  name: string;
+  isConfirm: boolean;
+  resetSession: boolean;
+  closeConversation?: boolean;
+}
+
+export interface Entity {
+  time?: string | null;
+  people?: number | null;
+  name?: string | null;
+  phone?: string | null;
+  startTime?: string | null;
+  endTime?: string | null;
+  day?: string | null;
+  parsedTime?: ParsedTime | null;
+  isWeekend?: boolean;
+  requestedTime?: string | null; // user nói
+  suggestedTime?: string | null; // hệ thống gợi ý
+  confirmedTime?: string | null; // chốt cuối
+  roundedEndTime?: string | null; // làm tròn thời gian chốt cuối theo rule giá
+  roundedStartTime?: string | null; // làm tròn thời gian user nói theo rule giá
+  duration?: number | null;
+  outTime?: string | null;
+}
+
+export interface ParsedTime {
+  startTime: string;
+  endTime: string;
+  date: string;
+  start: string;
+  isWeekend: boolean;
+  roundedStartTime?: string;
+  roundedEndTime?: string;
+}
+
+export interface Memory {
+  entity: Entity;
+  history: { role: string; content: string }[];
+}
+
+export type StepResult =
+  | { name: 'ASK_OTHER_INFO'; data: string[] }
+  | { name: 'CONFIRM_BOOKING'; data: null }
+  | { name: 'CONFIRM_ASK_PRICE'; data: null };
+
+export type MapEntity = Record<string, string>;
+
+export const FLOW_REQUIRED_FIELDS = {
+  BOOKING: ['name', 'phone', 'people', 'checkIn'],
+
+  PRICE_QUOTE: ['checkIn', 'people'],
+
+  CHECK_AVAILABILITY: ['checkIn', 'people'],
+};
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function isTimeInRange(time: string, start: string, end: string): boolean {
+  if (start <= end) return time >= start && time <= end;
+  return time >= start || time <= end;
+}
+
+export function findPriceRule(
+  rules: PriceRule[],
+  startTime: string,
+  people: number,
+  isWeekend: boolean,
+): PriceRule | null {
+  const dayType = isWeekend ? 'WEEKEND' : 'NORMAL';
+  return (
+    rules.find((r) => {
+      if (r.day_type !== dayType) return false;
+      if (people < r.min_people) return false;
+      if (people > r.max_people) return false;
+      if (!isTimeInRange(startTime, r.start_time, r.end_time)) return false;
+      return true;
+    }) || null
+  );
+}
+
+// ─── Service ─────────────────────────────────────────────────────────────────
+
+@Injectable()
+export class ConversationService {
+  constructor(
+    private memory: MemoryService,
+    private prisma: PrismaService,
+    private bookingQueue: BookingQueue,
+  ) {}
+
+  async getOrCreateUser(psid: string, bookingData: BookingData) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: { platformId: psid },
+    });
+
+    let user: any = existingUser;
+
+    if (!existingUser) {
+      user = await this.prisma.user.create({
+        data: {
+          platformId: psid,
+          username: bookingData.name ?? undefined,
+          phone: bookingData.phone ?? undefined,
+        },
+      });
+    }
+
+    return user;
+  }
+
+  resolveBehavior(ai) {
+    if (ai.intent === 'cancel') {
+      return 'TERMINATE';
+    }
+
+    if (['ask_price', 'check_availability'].includes(ai.intent)) {
+      return 'INTERRUPT';
+    }
+
+    if (['booking', 'update_booking'].includes(ai.intent)) {
+      return 'FLOW';
+    }
+
+    return 'FALLBACK';
+  }
+
+  async intentRouter(ai, session, channelConfig, jobPayload) {
+    const behavior = this.resolveBehavior(ai);
+
+    switch (behavior) {
+      case 'FLOW':
+        return this.handleBooking(ai, session, jobPayload.userId);
+
+      case 'INTERRUPT':
+      // return this.interruptHandler.handle(
+      //    ai,
+      //    session
+      // );
+
+      case 'TERMINATE':
+      // return this.cancelHandler.handle(
+      //    session
+      // );
+
+      default:
+      // return fallbackReply();
+    }
+  }
+
+  // async handleAskPrice(aiResult: ParsedIntent, msg: { userId: string; conversationId: number }) {
+  //   // const memory: Memory = await this.memory.get(msg.userId)
+  //   // const entity: Entity = this.merge(memory.entity, ai.entity)
+  //   // console.log("handleAskPrice with entity:", entity)
+
+  //   // if (!entity.time && !entity.people) {
+  //   //   return { textReply: null, name: ai.intent, isConfirm: true, resetSession: true }
+  //   // }
+
+  //   // let parsedTime: ParsedTime | undefined
+  //   // if (entity.time) {
+  //   //   const parsedResult = parseBookingTime(entity.time);
+  //   //   console.log("Parsed time result:", parsedResult)
+  //   //   if (parsedResult && parsedResult.time && parsedResult.endTime) {
+  //   //     entity.startTime = parsedResult.time
+  //   //     entity.endTime = parsedResult.endTime
+  //   //     entity.day = parsedResult.date
+  //   //     entity.isWeekend = parsedResult.isWeekend
+  //   //     parsedTime = {
+  //   //       startTime: parsedResult.time,
+  //   //       endTime: parsedResult.endTime,
+  //   //       date: parsedResult.date,
+  //   //       start: parsedResult.time,
+  //   //       isWeekend: parsedResult.isWeekend
+  //   //     }
+  //   //   }
+  //   // }
+  //   // console.log("handleAskPrice with parsed time:", parsedTime)
+  //   // memory.entity = entity
+  //   // await this.memory.save(msg.userId, memory)
+
+  //   // const mapEntity: MapEntity = { people: "số lượng người", startTime: "giờ đặt" }
+  //   // const step: StepResult = this.nextStep(entity, mapEntity, "CONFIRM_ASK_PRICE")
+
+  //   // if (step.name === "CONFIRM_ASK_PRICE") {
+  //   //   await this.prisma.conversation.update({
+  //   //     where: { id: msg.conversationId },
+  //   //     data: { state: "CONFIRM_ASK_PRICE", status: "CLOSED" }
+  //   //   })
+
+  //   //   if (!entity.time) {
+  //   //     return {
+  //   //       textReply: "Không thể xác định thời gian, vui lòng nhập lại.",
+  //   //       name: ai.intent,
+  //   //       isConfirm: false,
+  //   //       resetSession: false
+  //   //     }
+  //   //   }
+
+  //   //   const rawRules = await this.prisma.boxPriceInterval.findMany()
+  //   //   const priceRules: PriceRule[] = rawRules
+  //   //     .filter(r => r.dayType === "NORMAL" || r.dayType === "WEEKEND")
+  //   //     .map(r => ({
+  //   //       id: r.id,
+  //   //       name: r.name ?? "",
+  //   //       price_per_hour: r.pricePerHour,
+  //   //       start_time: r.startTime,
+  //   //       end_time: r.endTime,
+  //   //       day_type: r.dayType as "NORMAL" | "WEEKEND",
+  //   //       min_people: r.minPeople ?? 0,
+  //   //       max_people: r.maxPeople ?? 9999
+  //   //     }))
+
+  //   //   const rule = findPriceRule(
+  //   //     priceRules,
+  //   //     entity.startTime ?? "",
+  //   //     entity.people!,
+  //   //     entity.isWeekend ?? false
+  //   //   )
+
+  //   //   if (!rule) {
+  //   //     return {
+  //   //       textReply: "Không thể xác định thời gian, vui lòng nhập lại.",
+  //   //       name: ai.intent,
+  //   //       isConfirm: false,
+  //   //       resetSession: false
+  //   //     }
+  //   //   }
+
+  //   //   return {
+  //   //     textReply: `Giá phòng ${entity.people} người lúc ${entity.startTime} là ${rule.price_per_hour.toLocaleString()}/h ạ.`,
+  //   //     name: ai.intent,
+  //   //     isConfirm: true,
+  //   //     resetSession: true
+  //   //   }
+  //   // }
+
+  //   // return this.reply(step, ai.intent, msg.conversationId, mapEntity)
+  // }
+
+  isSwitchFlow(aiResult, session) {
+    return aiResult.intent === 'booking' && session.primaryFlow !== 'BOOKING';
+  }
+
+  switchFlow(aiResult, session) {
+    session.primaryFlow = 'BOOKING';
+
+    session.bookingData = {};
+
+    session.missingFields = [];
+
+    return {
+      type: 'SWITCH_FLOW',
+    };
+  }
+
+  isInterrupt(aiResult, session) {
+    return (
+      session.primaryFlow === 'BOOKING' &&
+      (aiResult.intent === 'ask_price' ||
+        aiResult.intent === 'check_availability')
+    );
+  }
+
+  interrupt(aiResult, session) {
+    return {
+      type: 'INTERRUPT',
+      interruptIntent: aiResult.intent,
+    };
+  }
+
+  confirm(session) {
+    if (session.status !== 'CONFIRMING') {
+      return {
+        type: 'INVALID_CONFIRM',
+      };
+    }
+
+    session.status = 'COMPLETED';
+
+    return {
+      type: 'COMPLETE',
+    };
+  }
+
+  mergeUpdates(session, aiResult: AIParseResult) {
+    Object.assign(session.bookingData, aiResult.updates);
+
+    session.primaryFlow = 'BOOKING';
+    session.lastIntent = aiResult.intent;
+    session.confidence = aiResult.confidence;
+  }
+
+  decideNextAction(session) {
+    if (session.status === 'COMPLETED') {
+      return {
+        type: 'COMPLETE',
+      };
+    } else if (session.status === 'COLLECTING_INFO') {
+      if (session.subStatus === 'AWAITING_CONFIRM_SUGGESTED_SLOT') {
+        return {
+          type: 'CONFIRM_SUGGESTED_SLOT',
+        };
+      } else if (session.subStatus === 'FULL_BOOKED') {
+        return {
+          type: 'FULL_BOOKED',
+        };
+      } else if (session.subStatus === 'ASKING_MISSING') {
+        return { type: 'ASK_MISSING' };
+      }
+
+      return {
+        type: 'SUGGEST_SLOT',
+      };
+    }
+
+    return {
+      type: 'ASK_MISSING',
+    };
+  }
+
+  async updateStatus(session: KaraokeSessionState) {
+    if (session.missingFields.length === 0) {
+      const { check, parsedResult } = await this.checkBooking(session);
+
+      console.log('Check booking result:', check, parsedResult);
+
+      if (check.success) {
+        const user = await this.getOrCreateUser(
+          session.sessionId,
+          session.bookingData,
+        );
+
+        await this.bookingQueue.addCreateBookingJob({
+          userId: Number(user.id),
+          peopleCount: session.bookingData.people!,
+          startTime: parsedResult.time,
+          endTime: parsedResult.endTime,
+          roundedStartTime: parsedResult.roundedTime,
+          roundedEndTime: parsedResult.roundedEndTime,
+          name: session.bookingData.name!,
+          phone: session.bookingData.phone!,
+          day: parsedResult.date,
+          room: check.roomId!,
+          tenantId: session.tenantId,
+        });
+
+        session.status = 'COMPLETED';
+        session.subStatus = null;
+      } else {
+        if ((check.nearestAvailable ?? []).length <= 0) {
+          session.status = 'COLLECTING_INFO';
+          session.subStatus = 'FULL_BOOKED';
+        } else {
+          session.status = 'COLLECTING_INFO';
+          session.subStatus = 'AWAITING_CONFIRM_SUGGESTED_SLOT';
+          session.suggestedSlots =
+            check.nearestAvailable?.map((s) => s.startTime) || [];
+        }
+      }
+    } else {
+      session.status = 'COLLECTING_INFO';
+      session.subStatus = 'ASKING_MISSING';
+    }
+  }
+
+  recalculateMissing(
+    session: KaraokeSessionState,
+    aiResult: AIParseResult,
+  ): string[] {
+    const intentFlow = session.primaryFlow || '';
+
+    const requiredFields = [...FLOW_REQUIRED_FIELDS[intentFlow]];
+
+    // if (session.requireBranch) {
+    //   requiredFields.push("branch");
+    // }
+
+    session.missingFields = requiredFields.filter((field) => {
+      const value = session.bookingData[field];
+
+      return value === undefined || value === null || value === '';
+    });
+
+    return session.missingFields;
+  }
+
+  async resolveBookingSource(
+    session: KaraokeSessionState,
+    userId: string,
+  ): Promise<'REDIS' | 'DATABASE' | 'NEW'> {
+    if (session && session.primaryFlow === 'BOOKING') {
+      return 'REDIS';
+    }
+    //  const dbBooking = await this.findNearestBooking(userId);
+
+    //  if(dbBooking){
+    //     return "DATABASE";
+    //  }
+
+    return 'NEW';
+  }
+
+  async prepareSessionBySource(source, session, userId) {
+    switch (source) {
+      case 'REDIS':
+        return session;
+
+      case 'DATABASE':
+      // return this.hydrateFromDB(
+      //   userId
+      // );
+
+      case 'NEW':
+        return session;
+    }
+  }
+
+  async handleBooking(
+    aiResult: AIParseResult,
+    session: KaraokeSessionState,
+    userId: string,
+  ) {
+    let workingSession = session;
+    const source = await this.resolveBookingSource(session, userId);
+
+    workingSession = await this.prepareSessionBySource(
+      source,
+      workingSession,
+      userId,
+    );
+
+    this.mergeUpdates(workingSession, aiResult);
+
+    workingSession.missingFields = this.recalculateMissing(
+      workingSession,
+      aiResult,
+    );
+
+    await this.updateStatus(workingSession);
+
+    return this.decideNextAction(workingSession);
+
+    // if (step.name === "CONFIRM_BOOKING") {
+
+    // return this.reply(step, ai.intent, msg.conversationId, mapEntity)
+  }
+
+  handleUpdateBooking(aiResult: AIParseResult, session: KaraokeSessionState) {}
+
+  async checkBooking(session: KaraokeSessionState): Promise<{
+    check: {
+      success: boolean;
+      nearestAvailable?: { startTime: string }[];
+      roomId?: number;
+    };
+    parsedResult: any;
+  }> {
+    const entity = session.bookingData;
+    if (!entity.checkIn)
+      return { check: { success: false }, parsedResult: null };
+
+    let parsedTime: string = entity.checkIn;
+
+    const parsedResult = parseBookingTime(
+      parsedTime,
+      entity.duration ?? undefined,
+    );
+
+    const user = await this.prisma.user.findUnique({
+      where: { platformId: session.sessionId },
+    });
+
+    const bookings = await this.prisma.booking.findMany({
+      where: {
+        day: parsedResult.date,
+        NOT: { userId: user?.id },
+      },
+    });
+
+    const bookingsByRoom = Object.values(
+      bookings.reduce(
+        (acc, b) => {
+          if (!acc[b.room]) {
+            acc[b.room] = {
+              room: b.room,
+              orders: [],
+            };
+          }
+
+          acc[b.room].orders.push({
+            startTime: b.checkIn,
+            endTime: b.checkOut,
+          });
+
+          return acc;
+        },
+        {} as Record<number, any>,
+      ),
+    );
+
+    const mapRoomCount = {
+      // 3: [1, 2, 3],
+      12: [4],
+    };
+
+    const roomCanBook: number[] = [];
+
+    for (const c of Object.keys(mapRoomCount)) {
+      if (Number(c) >= Number(entity.people)) {
+        roomCanBook.push(...mapRoomCount[c]);
+      }
+    }
+    console.log({ bookingsByRoom, roomCanBook, entity });
+
+    if (!parsedResult.time || !parsedResult.endTime) {
+      return {
+        check: { success: false },
+        parsedResult: null,
+      };
+    }
+
+    const check = checkAndBook(
+      bookingsByRoom,
+      parsedResult.time,
+      parsedResult.endTime,
+      parsedResult.date,
+      roomCanBook,
+    );
+
+    return { check, parsedResult };
+
+    if (check.success) {
+      // await this.memory.clear(msg.userId)
+      // await this.prisma.user.update({ // check tạo hoặc update user
+      //   where: { id: Number(msg.userId) },
+      //   data: {
+      //     username: entity.name!,
+      //     phone: entity.phone!,
+      //   }
+      // })
+      // await this.bookingQueue.addCreateBookingJob({
+      //   userId: Number(msg.userId),
+      //   peopleCount: entity.people!,
+      //   startTime: parsedResult.time,
+      //   endTime: parsedResult.endTime,
+      //   name: entity.name!,
+      //   phone: entity.phone!,
+      //   day: parsedResult.date,
+      //   platformSenderId: msg.platformSenderId,
+      //   room: check.roomId!,
+      //   roundedStartTime: entity.roundedStartTime,
+      //   roundedEndTime: entity.roundedEndTime,
+      // })
+      // return {
+      //   textReply: `✅ ĐẶT PHÒNG THÀNH CÔNG \n - Tên: ${entity.name} \n - SĐT: ${entity.phone} \n - Số người: ${entity.people} \n - Phòng: ${check.roomId} \n - Thời gian đặt: từ ${parsedResult.time} đến ${parsedResult.endTime} \n - Ngày: ${parsedResult.date} \nMình gửi lại bạn thông tin đặt phòng ạ, bạn kiểm tra lại giúp mình nhé! \nNếu cần hỗ trợ thêm bạn cứ nhắn tin cho mình nha!❤️`,
+      //   name: ai.intent,
+      //   isConfirm: true,
+      //   resetSession: true
+      // }
+    } else {
+      // if (check.nearestAvailable?.length === 0) {
+      //   return {
+      //     textReply: "😓 Rất tiếc hiện tại không còn phòng trống nào phù hợp với yêu cầu của bạn ạ. Bạn có thể gọi điện trực tiếp hootline để được hỗ trợ chính xác hơn nhé: 0123456789",
+      //     name: ai.intent,
+      //     isConfirm: false,
+      //     resetSession: false
+      //   }
+      // }
+      // memory.entity = {
+      //   ...entity,
+      //   suggestedTime: check.nearestAvailable?.[0]?.startTime
+      // }
+      // await this.memory.save(msg.userId, memory)
+      // return {
+      //   textReply: `😓 Đã hết mất phòng trống, hiện tại phải đợi đến ${check.nearestAvailable?.[0]?.startTime} mới có phòng trống ạ. Bạn có muốn đặt phòng vào khung giờ đó không ạ?`,
+      //   name: ai.intent,
+      //   isConfirm: false,
+      //   resetSession: false
+      // }
+    }
+  }
+
+  merge(oldState: Entity, newState: Partial<Entity>): Entity {
+    return {
+      ...oldState,
+      ...Object.fromEntries(
+        Object.entries(newState).filter(([_, v]) => v !== null),
+      ),
+    };
+  }
+
+  nextStep(
+    state: Entity,
+    mapEntity: MapEntity,
+    confirmText: string,
+  ): StepResult {
+    const missingFields = Object.keys(mapEntity).filter((key) => {
+      return !state[key as keyof Entity];
+    });
+    if (missingFields.length > 0) {
+      return { name: 'ASK_OTHER_INFO', data: missingFields };
+    }
+    return {
+      name: confirmText as 'CONFIRM_BOOKING' | 'CONFIRM_ASK_PRICE',
+      data: null,
+    };
+  }
+
+  async reply(
+    step: StepResult,
+    intentName: string,
+    conversationId: number,
+    mapEntity: MapEntity,
+  ): Promise<ConversationReply> {
+    switch (step.name) {
+      case 'ASK_OTHER_INFO':
+        await this.prisma.conversation.update({
+          where: { id: conversationId },
+          data: { state: 'ASK_OTHER_INFO' },
+        });
+        return {
+          textReply: `Bạn cho mình xin thêm thông tin cụ thể: ${step.data.map((key) => mapEntity[key]).join(', ')} ạ. Bạn cung cấp thêm để mình ${intentName === 'ask_price' ? 'check giá cho bạn nhé' : 'đặt phòng cho bạn nhé'}!`,
+          name: intentName,
+          isConfirm: false,
+          resetSession: false,
+        };
+
+      default:
+        throw new Error(`Unhandled step: ${step.name}`);
+    }
+  }
+}
+
+export function generateTimes(datePicked: Date = new Date()): string[] {
+  const times: string[] = [];
+  for (let day = 0; day <= 1; day++) {
+    const currentDatePicked = new Date(datePicked);
+    currentDatePicked.setDate(currentDatePicked.getDate() + day);
+    if (day === 0) {
+      for (let h = 6; h < 24; h++) {
+        for (let m of [0, 30]) {
+          const hh = h.toString().padStart(2, '0');
+          const mm = m.toString().padStart(2, '0');
+          times.push(`${hh}:${mm}`);
+        }
+      }
+    } else {
+      for (let h = 0; h < 6; h++) {
+        for (let m of [0, 30]) {
+          const hh = h.toString().padStart(2, '0');
+          const mm = m.toString().padStart(2, '0');
+          times.push(`${hh}:${mm}`);
+        }
+      }
+    }
+  }
+  return times;
+}
+</file>
+
+<file path="src/guards/confidence.guard.ts">
+import { Injectable } from "@nestjs/common";
+import { AIParseResult } from "src/ai/ai.service";
+
+@Injectable()
+export class ConfidenceGuard {
+
+check(aiResult:AIParseResult){
+
+   if(aiResult.confidence < 0.65){
+      throw new Error("LOW_CONFIDENCE");
+   }
+
+}
+}
+</file>
+
+<file path="src/intent/dto/create-intent.dto.ts">
+import { IsString, IsOptional, IsArray, IsBoolean } from 'class-validator';
+
+export class CreateIntentDto {
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  replyText?: string;
+
+  @IsOptional()
+  @IsArray()
+  images?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+</file>
+
+<file path="src/intent/dto/update-intent.dto.ts">
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateIntentDto } from './create-intent.dto';
+
+export class UpdateIntentDto extends PartialType(CreateIntentDto) {}
+</file>
+
+<file path="src/intent/intent.controller.ts">
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
+import { IntentService } from './intent.service';
+import { CreateIntentDto } from './dto/create-intent.dto';
+import { UpdateIntentDto } from './dto/update-intent.dto';
+
+@Controller('api/v1/intents')
+export class IntentController {
+  constructor(private readonly intentService: IntentService) {}
+
+  @Post()
+  create(@Body() dto: CreateIntentDto) {
+    return this.intentService.create(dto);
+  }
+
+  @Get()
+  findAll() {
+    return this.intentService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.intentService.findOne(Number(id));
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() dto: UpdateIntentDto) {
+    return this.intentService.update(Number(id), dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.intentService.remove(Number(id));
+  }
+}
+</file>
+
+<file path="src/intent/intent.module.ts">
+import { Module } from '@nestjs/common';
+import { IntentService } from './intent.service';
+import { IntentController } from './intent.controller';
+import { PrismaService } from '../../prisma/prisma.service';
+
+@Module({
+  controllers: [IntentController],
+  providers: [IntentService, PrismaService],
+})
+export class IntentModule {}
+</file>
+
+<file path="src/intent/intent.service.ts">
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateIntentDto } from './dto/create-intent.dto';
+import { UpdateIntentDto } from './dto/update-intent.dto';
+
+@Injectable()
+export class IntentService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(dto: CreateIntentDto) {
+    return this.prisma.intent.create({
+      data: {
+        name: dto.name,
+        replyText: dto.replyText,
+        isActive: dto.isActive ?? true,
+        images: dto.images
+          ? {
+              create: dto.images.map((url) => ({ url })),
+            }
+          : undefined,
+      },
+      include: { images: true },
+    });
+  }
+
+  async findAll() {
+    const data = this.prisma.intent.findMany({
+    //   orderBy: { createdAt: 'desc' },
+    //   include: { images: true },
+    });
+    return data;
+  }
+
+  async findOne(id: number) {
+    const intent = await this.prisma.intent.findUnique({
+      where: { id },
+      include: { images: true },
+    });
+
+    if (!intent) throw new NotFoundException('Intent not found');
+
+    return intent;
+  }
+
+  async update(id: number, dto: UpdateIntentDto) {
+    await this.findOne(id);
+    console.log({id, dto})
+    return this.prisma.$transaction(async (tx) => {
+      if (dto.images) {
+        // Xoá toàn bộ image cũ rồi tạo lại
+        await tx.intentImage.deleteMany({
+          where: { intentId: id },
+        });
+      }
+
+      return tx.intent.update({
+        where: { id },
+        data: {
+          name: dto.name,
+          replyText: dto.replyText,
+          isActive: dto.isActive,
+          images: dto.images
+            ? {
+                create: dto.images.map((url) => ({ url })),
+              }
+            : undefined,
+        },
+        include: { images: true },
+      });
+    });
+  }
+
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.prisma.intent.delete({
+      where: { id },
+    });
+  }
+}
+</file>
+
+<file path="src/main.ts">
+import * as dotenv from 'dotenv';
+dotenv.config();
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: [
+    'http://localhost:5173',
+    'http://localhost:3001',
+  ],
+  credentials: true,
+  });
+
+  await app.listen(process.env.PORT ?? 3000);
+}
+bootstrap();
+</file>
+
+<file path="src/memory/memory.module.ts">
+import {  Module } from '@nestjs/common';
+import { MemoryService } from "./memory.service";
+
+@Module({
+    providers: [MemoryService],
+    exports: [MemoryService],
+})
+export class MemoryModule { }
+</file>
+
+<file path="src/memory/memory.service.ts">
+import { Injectable } from '@nestjs/common'
+import Redis from 'ioredis'
+import { Entity, Memory } from 'src/conversation/conversation.service'
+
+const redis = new Redis()
+
+@Injectable()
+export class MemoryService {
+
+ async get(userId: string) {
+
+   const data = await redis.get(`chat:memory:${userId}`)
+
+   if (!data) {
+     return {
+       entity: {},
+        history: []
+     }
+   }
+
+   return JSON.parse(data)
+ }
+
+ async save(userId: string, memory: Memory) {
+
+   await redis.set(
+     `chat:memory:${userId}`,
+     JSON.stringify(memory),
+     "EX",
+     3600 // 1 hour expiration
+   )
+ }
+
+ async clear(userId: string) {
+   await redis.del(`chat:memory:${userId}`)
+ }
+
+}
+</file>
+
+<file path="src/messenger/messenger.controller.spec.ts">
+import { Test, TestingModule } from '@nestjs/testing';
+import { MessengerController } from './messenger.controller';
+
+describe('MessengerController', () => {
+  let controller: MessengerController;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [MessengerController],
+    }).compile();
+
+    controller = module.get<MessengerController>(MessengerController);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+});
+</file>
+
+<file path="src/messenger/messenger.controller.ts">
+import { Controller, Get, Post, Query, Body } from '@nestjs/common';
+import { MessengerService } from './messenger.service';
+
+@Controller('webhook')
+export class MessengerController {
+  constructor(private readonly service: MessengerService) {}
+
+  @Get()
+  verify(
+    @Query('hub.mode') mode: string,
+    @Query('hub.verify_token') token: string,
+    @Query('hub.challenge') challenge: string,
+  ) {
+    if (mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
+      return challenge;
+    }
+    return 'Forbidden';
+  }
+
+  @Post()
+  async receive(@Body() body: any) {
+    await this.service.handleMessage(body);
+    return 'EVENT_RECEIVED';
+  }
+}
+</file>
+
+<file path="src/messenger/messenger.module.ts">
+import { forwardRef, Module } from '@nestjs/common';
+import { MessengerController } from './messenger.controller';
+import { MessengerService } from './messenger.service';
+import { QueueModule } from 'src/queue/queue.module';
+import { ConversationModule } from 'src/conversation/conversation.module';
+
+@Module({
+  imports: [forwardRef(() => QueueModule), forwardRef(() => ConversationModule)],
+  controllers: [MessengerController],
+  providers: [MessengerService],
+  exports: [MessengerService],
+})
+export class MessengerModule {}
+</file>
+
+<file path="src/messenger/messenger.service.spec.ts">
+import { Test, TestingModule } from '@nestjs/testing';
+import { MessengerService } from './messenger.service';
+
+describe('MessengerService', () => {
+  let service: MessengerService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [MessengerService],
+    }).compile();
+
+    service = module.get<MessengerService>(MessengerService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
+</file>
+
+<file path="src/messenger/messenger.service.ts">
+import { Injectable } from '@nestjs/common';
+import axios from 'axios';
+import { PrismaService } from '../../prisma/prisma.service';
+import { MessageQueueService } from '../queue/queue.service';
+
+@Injectable()
+export class MessengerService {
+    constructor(
+        private prisma: PrismaService,
+        private queue: MessageQueueService,
+    ) { }
+    async handleMessage(body: any) {
+        for (const entry of body.entry || []) {
+            const logsToInsert: any[] = [];
+            for (const event of entry.messaging || []) {
+                if (event.message?.text) {
+                    console.log(event.message)
+                    const payload = {
+                        platform: 'facebook',
+                        channelId: event.recipient.id, // 🔥 Rất quan trọng: Đây chính là page_id
+                        userId: event.sender.id,       // PSID của khách hàng
+                        text: event.message.text,
+                        platformSenderId: event.sender.id,
+                        timestamp_ms: event.timestamp,
+                        from: "MESSENGER",
+                        role: event.message?.is_echo ? "ASSISTANT" : "USER", // "user" for user messages, "assistant" for bot replies
+                    };
+                    if (event.message?.is_echo) {
+                        payload.platformSenderId = event.recipient.id; // ID của bot
+                    }
+
+                    logsToInsert.push({
+                        ...payload,
+                        type: event.message?.is_echo
+                            ? event.message?.app_id != process.env.YOUR_APP_ID
+                                ? "ADMIN_REPLY"
+                                : "BOT_REPLY"
+                            : "USER_MESSAGE",
+                        createdAt: new Date(),
+                    });
+
+                }
+
+            }
+            console.log(logsToInsert);
+            for (const log of logsToInsert) {
+                if (log.type === "USER_MESSAGE") {
+                    await this.queue.enqueue(log);
+                }
+            }
+        }
+    }
+
+    async getOrCreateUser(psid: string) {
+        const existingUser = await this.prisma.user.findFirst({
+            where: { platformId: psid },
+        });
+
+        let user: any = existingUser;
+
+        if (!existingUser) {
+            user = await this.prisma.user.create({
+                data: {
+                    platformId: psid
+                },
+            });
+        }
+
+        return user;
+    }
+
+    async sendMessage(psid: string, message: any) {
+        try {
+            await axios.post(
+                `https://graph.facebook.com/v19.0/me/messages?access_token=${process.env.PAGE_ACCESS_TOKEN}`,
+                {
+                    recipient: { id: psid },
+                    message,
+                },
+            );
+
+            return {
+                textReply: message,
+                type: "ASSISTANT"
+            }
+        } catch (e) {
+            console.error("Error sending message:", e);
+        }
+    }
+}
+</file>
+
+<file path="src/queue/constants.ts">
+export const MESSAGE_QUEUE = "message-queue";
+
+export enum MessageStatus {
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  REPLIED = "REPLIED",
+  FAILED = "FAILED",
+  SENT = "SENT",
+}
+
+export enum Direction {
+  INCOMING = "INCOMING",
+  OUTGOING = "OUTGOING",
+}
+</file>
+
+<file path="src/queue/event.service.ts">
+import { Injectable } from "@nestjs/common"
+import Redis from "ioredis"
+
+@Injectable()
+export class EventService {
+  private pub = new Redis()
+
+  async publish(channel: string, payload: any) {
+    await this.pub.publish(channel, JSON.stringify(payload))
+  }
+}
+</file>
+
+<file path="src/queue/interfaces.ts">
+// Các trạng thái của một vòng đời đặt phòng
+export type SessionStatus = 
+    | 'INIT'              // Vừa khởi tạo, chưa hỏi được gì
+    | 'COLLECTING_INFO'   // Đang trong quá trình hỏi các trường còn thiếu
+    | 'COMPLETED'         // Đã lưu Database thành công
+    | 'CANCELLED'         // Khách hủy giữa chừng hoặc session hết hạn
+    | 'TRANSFER_TO_AGENT';// Khách đòi gặp nhân viên thật
+
+export type SubSessionStatus = 
+    | 'ASKING_MISSING'                     // Đang hỏi các trường còn thiếu
+    | 'AWAITING_CONFIRM_SUGGESTED_SLOT'    // Đang chờ xác nhận slot gợi ý
+    | 'FULL_BOOKED'                        // Đã đầy phòng
+    | null;                                // Không có trạng thái phụ
+
+export type PrimaryFlow =
+    | "BOOKING"
+    | "PRICE_QUOTE"
+    | "CHECK_AVAILABILITY"
+    | null;    
+
+// Dữ liệu cốt lõi (Phần DUY NHẤT được đưa vào Prompt cho AI đọc)
+export interface BookingData {
+    name: string | null;
+    phone: string | null;
+    people: number | null;
+    branch: string | null;    // Tên cơ sở (VD: "Cầu Giấy", "Hà Đông")
+    checkIn: string | null;   // Giờ đến thô (VD: "8h tối nay")
+    checkOut: string | null;  // Giờ về thô (VD: "đến 23h")
+    duration: number | null;  // Số giờ hát (VD: 2)
+    day: string | null;      // Ngày hát (VD: "2024-12-31")
+}
+
+// Cấu trúc Session hoàn chỉnh (Lưu trong Redis)
+export interface KaraokeSessionState {
+    // ==========================================
+    // NHÓM 1: ĐỊNH DANH (ROUTING)
+    // ==========================================
+    sessionId: string;        // ID người dùng (PSID Facebook, Zalo User ID)
+    platform: string;         // 'facebook' | 'zalo' | 'tiktok'
+    channelId: string;        // ID của Page nhận tin nhắn (Để biết chat vào page nào)
+
+    // ==========================================
+    // NHÓM 2: NGỮ CẢNH CỦA QUÁN (TENANT CONTEXT)
+    // ==========================================
+    tenantId: string;         // ID của Quán (VD: "T001")
+    tenantName: string;       // Tên thương hiệu (VD: "Music Box")
+    requireBranch: boolean;   // Quán này có bắt buộc chọn cơ sở không?
+    availableBranches: Array<{ id: string; name: string; aliases: string | null }>; // Danh sách cơ sở để Validate
+    primaryFlow: PrimaryFlow;     // Luồng chính của khách (VD: "booking", "ask_price", "update_booking")
+
+    // ==========================================
+    // NHÓM 3: DỮ LIỆU ĐẶT PHÒNG & AI (NLU STATE)
+    // ==========================================
+    bookingData: BookingData; // Data AI liên tục cập nhật vào
+    lastIntent: string | null;// Ý định của tin nhắn gần nhất (VD: "update_booking", "ask_price")
+    
+    // ==========================================
+    // NHÓM 4: ĐIỀU KHIỂN LUỒNG (FLOW CONTROL)
+    // ==========================================
+    status: SessionStatus;    // Trạng thái hiện tại của phiên chat
+    subStatus: SubSessionStatus;   // Trạng thái phụ để điều khiển chi tiết hơn
+    missingFields: string[];  // Mảng các trường đang bị thiếu (VD: ['phone', 'checkIn'])
+    stepCount: number;        // Đếm số lượt chat
+    suggestedSlots: string[];   // Các slot AI gợi ý khách có thể cung cấp (VD: ['checkIn', 'people'])
+
+    // ==========================================
+    // NHÓM 5: SIÊU DỮ LIỆU (METADATA)
+    // ==========================================
+    createdAt: number;        // Timestamp lúc phiên bắt đầu
+    updatedAt: number;        // Timestamp tin nhắn cuối (Dùng để gia hạn TTL Redis)
+}
+</file>
+
+<file path="src/queue/processor.ts">
+import axios from 'axios';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { PrismaService } from '../../prisma/prisma.service';
+import { MESSAGE_QUEUE, MessageStatus } from './constants';
+import { AIContext, AIService } from 'src/ai/ai.service';
+import { RedisService } from 'src/redis/redis.service';
+import { KaraokeSessionState } from './interfaces';
+import { ConfidenceGuard } from 'src/guards/confidence.guard';
+import { ValidatorService } from 'src/validator/booking.validator';
+import { ConversationService } from 'src/conversation/conversation.service';
+
+export const MAP_NAME_FIELD = {
+  checkIn: 'giờ đến',
+  people: 'số lượng người',
+  phone: 'số điện thoại',
+  name: 'tên',
+};
+
+@Processor(MESSAGE_QUEUE)
+export class MessageProcessor extends WorkerHost {
+  constructor(
+    private prisma: PrismaService,
+    private ai: AIService,
+    private redis: RedisService,
+    // private confidenceGuard: ConfidenceGuard,
+    // private validator: ValidatorService,
+    private conversation: ConversationService,
+  ) {
+    super();
+    console.log('Worker started');
+  }
+
+  handleGreeting = async (_, msg) => {
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages`,
+      {
+        recipient: { id: msg.platformSenderId },
+        message: {
+          text: '68 MUSIC BOX chào bạn ạ! Bạn có muốn đặt phòng trước không ạ?',
+        },
+      },
+      {
+        params: {
+          access_token: process.env.PAGE_ACCESS_TOKEN,
+        },
+      },
+    );
+  };
+
+  handleAskPrice = async (_, msg) => {};
+
+  handleBooking = async (aiResult, session, channelConfig, jobPayload) => {
+    console.log({ aiResult, session, channelConfig });
+
+    return this.conversation.handleBooking(
+      aiResult,
+      session,
+      jobPayload.userId,
+    );
+  };
+
+  handleUpdateBooking = async (aiResult, session, channelConfig) => {
+    console.log({ aiResult, session, channelConfig });
+
+    return this.conversation.handleUpdateBooking(aiResult, session);
+  };
+
+  private INTENT_MAP = {
+    greeting: this.handleGreeting,
+    booking: this.handleBooking,
+    ask_price: this.handleAskPrice,
+    update_booking: this.handleUpdateBooking,
+    // other: handleOther,
+    // promotion: handlePromotion,
+    // ask_services_genneral: handleAskServicesGeneral,
+    // ask_services_other: handleAskServiceOther,
+    // ask_menu: handleAskMenu,
+    // ask_opening_time: handleAskOpeningTime,
+    // live_support: handleLiveSupport,
+    // ask_location: handleAskLocation,
+    // thank_you: handleThankYou,
+  };
+
+  async handleSendMessage({
+    name,
+    senderId,
+    conversationId,
+  }: {
+    name: string;
+    senderId: string;
+    conversationId: number;
+  }) {
+    const intent = await this.prisma.intent.findFirst({
+      where: { name },
+      include: { images: true },
+    });
+
+    if (!intent) {
+      console.warn('Intent ask_price not found in DB');
+      return;
+    }
+
+    if (intent.images && intent.images.length > 0) {
+      // Do something with the images, e.g., send them to the user
+      for (const img of intent.images) {
+        try {
+          await axios.post(
+            `https://graph.facebook.com/v19.0/me/messages`,
+            {
+              recipient: { id: senderId },
+              message: {
+                attachment: {
+                  type: 'image',
+                  payload: { url: img.url, is_reusable: true },
+                },
+              },
+            },
+            {
+              params: {
+                access_token: process.env.PAGE_ACCESS_TOKEN,
+              },
+            },
+          );
+        } catch (e) {
+          console.error('Error sending image:', e);
+        }
+      }
+    }
+
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages`,
+      {
+        recipient: { id: senderId },
+        message: { text: intent.replyText },
+      },
+      {
+        params: {
+          access_token: process.env.PAGE_ACCESS_TOKEN,
+        },
+      },
+    );
+  }
+
+  async process(job: any) {
+    const { jobPayload } = job.data;
+    console.dir(jobPayload, { depth: null });
+
+    /* ---------- load context ---------- */
+    try {
+      // Truy vấn xem page_id này thuộc về quán nào
+      const channelConfig = await this.prisma.channel.findUnique({
+        where: { id: jobPayload.channelId },
+        include: { tenant: true },
+      });
+
+      console.log('channelConfig', channelConfig);
+
+      if (!channelConfig) {
+        console.error(`Unrecognized channel ID: ${jobPayload.channelId}`);
+        return; // Bỏ qua nếu page chưa được kết nối
+      }
+
+      // 1. GET SESSION
+      let session = await this.redis.getSession(jobPayload.userId);
+
+      if (!session) {
+        // Nếu chưa có, khởi tạo state mới tinh
+        session = this.redis.createDefault(jobPayload, channelConfig);
+      }
+      console.log('[Worker] Loaded session from Redis:', session);
+      const aiContext: AIContext = {
+        tenantName: session.tenantName,
+        status: session.status,
+        subStatus: session.subStatus,
+        primaryFlow: session.primaryFlow,
+        lastIntent: session.lastIntent,
+        lastAskedFields: session.missingFields,
+        suggestedSlots: session.suggestedSlots,
+        bookingData: session.bookingData, // Gồm giờ, tên, SĐT, số người...
+      };
+
+      const aiResult = await this.ai.parse(aiContext, jobPayload.text);
+      console.log('[Worker] AI parsed result:', aiResult);
+
+      const action = await this.conversation.intentRouter(
+        aiResult,
+        session,
+        channelConfig,
+        jobPayload,
+      );
+
+      const reply = this.responseBuilder(action, session);
+
+      await axios.post(
+        `https://graph.facebook.com/v19.0/me/messages`,
+        {
+          recipient: { id: jobPayload.platformSenderId },
+          message: { text: reply },
+        },
+        {
+          params: {
+            access_token: process.env.PAGE_ACCESS_TOKEN,
+          },
+        },
+      );
+      console.log('session after handler:', session);
+      //. CẬP NHẬT TRẠNG THÁI (State Merge)
+      session.updatedAt = Date.now();
+      await this.redis.saveSession(jobPayload.userId, session);
+
+      // this.confidenceGuard.check(aiResult);
+
+      // this.validator.validate(aiResult);
+    } catch (e) {
+      console.error('Error parsing AI context:', e);
+      // await this.fail(jobPayload.id);
+      return;
+    }
+  }
+
+  async done(id: number) {
+    await this.prisma.message.update({
+      where: { id },
+      data: { status: MessageStatus.REPLIED },
+    });
+  }
+
+  async fail(id: number) {
+    await this.prisma.message.update({
+      where: { id },
+      data: { status: MessageStatus.FAILED },
+    });
+  }
+
+  responseBuilder(action, session) {
+    console.log('Building response for action:', action, session);
+    switch (action.type) {
+      case 'SWITCH_FLOW':
+        return 'Dạ mình đặt phòng ạ ❤️ Cho em xin giờ, số khách và sđt nhé.';
+      case 'SUGGEST_SLOT':
+        return `😓 Đã hết mất phòng trống, hiện tại phải đợi đến ${session.suggestedSlots[0]} mới có phòng trống ạ. Bạn có muốn đặt phòng vào khung giờ đó không ạ?`;
+
+      case 'FULL_BOOKED':
+        return `😓 Rất tiếc hiện tại không còn phòng trống nào phù hợp với yêu cầu của bạn ạ. Bạn có thể gọi điện trực tiếp hootline để được hỗ trợ chính xác hơn nhé: 0123456789`;
+      case 'INTERRUPT':
+        return `
+Dạ giá bên em từ 200k/giờ ❤️
+
+Mình tiếp tục booking nhé,
+cho em xin thêm:
+${session.missingFields.join(', ')}
+`;
+
+      case 'INVALID_CONFIRM':
+        return 'Dạ mình chưa đủ thông tin để xác nhận booking ạ ❤️';
+
+      case 'CONFIRM_SUGGESTED_SLOT':
+        return `
+Dạ mình có thể đặt phòng vào khung giờ ${session.suggestedSlots[0]} ạ ❤️`;
+
+      case 'COMPLETE':
+        return 'Booking của anh/chị đã được tạo thành công ❤️';
+
+      case 'CONFIRM':
+        return `
+Em xin xác nhận booking:
+
+${JSON.stringify(session.bookingData)}
+
+Anh/chị xác nhận giúp em nhé ❤️
+`;
+
+      case 'ASK_MISSING':
+        session.lastAskedFields = session.missingFields;
+
+        return `
+Cho em xin thêm:
+${session.missingFields.map((field) => MAP_NAME_FIELD[field] || field).join(', ')}
+`;
+
+      default:
+        return 'Dạ em chưa hiểu ý mình lắm ạ ❤️';
+    }
+  }
+}
+</file>
+
+<file path="src/queue/queue.module.ts">
+import { forwardRef, Module } from "@nestjs/common"
+import { BullModule } from "@nestjs/bullmq"
+import { MessageProcessor } from "./processor"
+import { MessageQueueService } from "./queue.service"
+import { PrismaModule } from "../../prisma/prisma.module"
+import { AIModule } from "src/ai/ai.module"
+import { EventService } from "./event.service"
+import { RedisService } from "src/redis/redis.service"
+import { ConversationModule } from "src/conversation/conversation.module"
+
+@Module({
+  imports: [
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST || "localhost",
+        port: Number(process.env.REDIS_PORT) || 6379,
+      },
+    }),
+
+    BullModule.registerQueue({
+      name: "message-queue",
+    }),
+    PrismaModule,
+    AIModule,
+    forwardRef(() => ConversationModule),
+  ],
+  providers: [MessageProcessor, MessageQueueService, EventService, RedisService],
+  exports: [MessageQueueService, EventService, RedisService],
+})
+export class QueueModule {}
+</file>
+
+<file path="src/queue/queue.service.ts">
+import { Injectable } from "@nestjs/common";
+import { InjectQueue } from "@nestjs/bullmq";
+import { Queue } from "bullmq";
+
+@Injectable()
+export class MessageQueueService {
+  constructor(
+    @InjectQueue("message-queue") private queue: Queue,
+  ) {}
+
+  async enqueue(jobPayload: any) {
+    await this.queue.add(
+      "process-message",
+      { jobPayload },
+      {
+        delay: 1000, // ưu tiên admin 20s
+        attempts: 3,
+        backoff: { type: "exponential", delay: 3000 },
+        removeOnComplete: true,
+        removeOnFail: false,
+      },
+    );
+  }
+}
+</file>
+
+<file path="src/queue/queue.stream.ts">
+// queue.ts
+import { Queue } from "bullmq"
+
+export const bookingQueue = new Queue("booking", {
+  connection: { host: "localhost", port: 6379 }
+})
+</file>
+
+<file path="src/r2/r2.controller.ts">
+import { Controller, Post, Body } from "@nestjs/common";
+import { R2Service } from "./r2.service";
+
+@Controller("api/v1/r2")
+export class R2Controller {
+  constructor(private r2: R2Service) {}
+
+  @Post("presign")
+  async presign(@Body() body: { fileName: string; contentType: string }) {
+    return this.r2.presign(body.fileName, body.contentType);
+  }
+}
+</file>
+
+<file path="src/r2/r2.module.ts">
+import { Module } from "@nestjs/common";
+import { R2Controller } from "./r2.controller";
+import { R2Service } from "./r2.service";
+
+@Module({
+  controllers: [R2Controller],
+  providers: [R2Service],
+})
+export class R2Module {}
+</file>
+
+<file path="src/r2/r2.service.ts">
+import { Injectable } from '@nestjs/common'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+
+@Injectable()
+export class R2Service {
+
+  private s3 = new S3Client({
+    region: "auto",
+    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: process.env.R2_ACCESS_KEY as string,
+      secretAccessKey: process.env.R2_SECRET_KEY as string
+    }
+  })
+
+  async presign(fileName: string, contentType: string) {
+
+    const ext = fileName.split('.').pop()
+
+    const key = `uploads/${Date.now()}.${ext}`
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET,
+      Key: key,
+      ContentType: contentType
+    })
+
+    const uploadUrl = await getSignedUrl(this.s3, command, {
+      expiresIn: 300
+    })
+
+    const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`
+
+    return {
+      uploadUrl,
+      publicUrl
+    }
+  }
+
+}
+</file>
+
+<file path="src/redis/redis.service.ts">
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import Redis from 'ioredis';
+import { KaraokeSessionState } from 'src/queue/interfaces';
+
+@Injectable()
+export class RedisService implements OnModuleInit, OnModuleDestroy {
+    private redisClient!: Redis;
+    
+    // Tiền tố để phân biệt key của Chatbot với các hệ thống khác dùng chung Redis
+    private readonly PREFIX = 'karaoke_session:'; 
+    
+    // Thời gian sống của 1 phiên chat: 30 phút (tính bằng giây)
+    private readonly TTL_SECONDS = 1800; 
+
+    // Khởi tạo kết nối Redis khi NestJS chạy
+    onModuleInit() {
+        this.redisClient = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+        
+        this.redisClient.on('connect', () => console.log('✅ Redis connected successfully.'));
+        this.redisClient.on('error', (err) => console.error('❌ Redis error:', err));
+    }
+
+    // Đóng kết nối khi tắt server
+    onModuleDestroy() {
+        this.redisClient.disconnect();
+    }
+
+    /**
+     * LẤY SESSION (GET)
+     * @param userId ID của khách hàng (PSID, Zalo ID)
+     * @returns Object SessionState hoặc null nếu không có/đã hết hạn
+     */
+    async getSession(userId: string): Promise<KaraokeSessionState | null> {
+        const key = `${this.PREFIX}${userId}`;
+        const data = await this.redisClient.get(key);
+
+        if (!data) {
+            return null; // Khách mới hoặc phiên chat đã hết hạn
+        }
+
+        try {
+            // Redis chỉ lưu string, nên lấy ra phải parse về JSON
+            return JSON.parse(data) as KaraokeSessionState;
+        } catch (error) {
+            console.error(`[Redis] Lỗi parse JSON cho key ${key}:`, error);
+            return null;
+        }
+    }
+
+    /**
+     * LƯU SESSION (SET)
+     * @param userId ID của khách hàng
+     * @param state Toàn bộ object trạng thái hiện tại
+     */
+    async saveSession(userId: string, state: KaraokeSessionState): Promise<void> {
+        const key = `${this.PREFIX}${userId}`;
+        
+        // Cập nhật lại thời gian tương tác cuối cùng
+        state.updatedAt = Date.now();
+
+        // Chuyển Object thành String và lưu vào Redis kèm theo TTL
+        // 'EX' có nghĩa là Expire (hết hạn) tính bằng giây
+        await this.redisClient.set(
+            key, 
+            JSON.stringify(state), 
+            'EX', 
+            this.TTL_SECONDS
+        );
+    }
+
+    /**
+     * XÓA SESSION (DELETE)
+     * Dùng khi khách đã chốt đơn thành công hoặc chủ động hủy
+     */
+    async deleteSession(userId: string): Promise<void> {
+        const key = `${this.PREFIX}${userId}`;
+        await this.redisClient.del(key);
+    }
+
+    createDefault(payload: any, channelConfig: any):KaraokeSessionState{
+      return {
+      // 1. Định danh khách hàng & Nền tảng
+      sessionId: payload.userId,
+      platform: payload.platform,
+      channelId: payload.channelId,
+
+      // 2. Bơm cấu hình của Quán (Tenant) vào State
+      tenantId: channelConfig.tenant.id,
+      tenantName: channelConfig.tenant.name,
+      requireBranch: channelConfig.tenant.requireBranchSelection,
+      // (Lưu ý: Lúc query channelConfig ở trên, bạn nhớ join thêm bảng branches)
+      availableBranches: channelConfig.tenant.branches || [],
+      primaryFlow: null,
+
+      // 3. Khởi tạo giỏ hàng (Booking Data) rỗng
+      bookingData: {
+        name: null,
+        phone: null,
+        people: null,
+        branch: channelConfig.defaultBranch ? channelConfig.defaultBranch.name : null,
+        checkIn: null,
+        checkOut: null,
+        duration: null,
+        day: null
+      },
+      lastIntent: null,
+
+      // 4. Các biến điều khiển luồng
+      status: 'INIT',     // Trạng thái mới bắt đầu
+      subStatus: null,
+      missingFields: [],  // Chưa thiếu gì vì chưa kiểm tra
+      stepCount: 0,       // Đếm số câu chat = 0
+      suggestedSlots: [], // Chưa gợi ý gì vì chưa phân tích
+
+      // 5. Metadata thời gian
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+   }
+}
+</file>
+
+<file path="src/validator/booking.validator.ts">
+import { Injectable } from "@nestjs/common";
+import { AIParseResult } from "src/ai/ai.service";
+
+@Injectable()
+export class ValidatorService {
+
+    validate(aiResult: AIParseResult) {
+
+        if (aiResult.updates.people && aiResult.updates.people > 30) {
+            throw Error();
+        }
+
+    }
+}
+</file>
+
+<file path="src/worker.ts">
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+import { NestFactory } from "@nestjs/core";
+import { QueueModule } from "./queue/queue.module";
+
+async function bootstrap() {
+  await NestFactory.createApplicationContext(QueueModule);
+}
+bootstrap();
+</file>
+
+<file path="test/app.e2e-spec.ts">
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import request from 'supertest';
+import { App } from 'supertest/types';
+import { AppModule } from './../src/app.module';
+
+describe('AppController (e2e)', () => {
+  let app: INestApplication<App>;
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+});
+</file>
+
+<file path="test/jest-e2e.json">
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}
+</file>
+
+<file path="tmpclaude-3fd6-cwd">
+/d/TUNA/68_MUSIC_BOX/BE_CHATBOT/be-chatbot
+</file>
+
+<file path="tsconfig.build.json">
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
+}
+</file>
+
+</files>

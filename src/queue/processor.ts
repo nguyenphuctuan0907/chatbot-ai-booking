@@ -8,6 +8,15 @@ import { KaraokeSessionState } from './interfaces';
 import { ConfidenceGuard } from 'src/guards/confidence.guard';
 import { ValidatorService } from 'src/validator/booking.validator';
 import { ConversationService } from 'src/conversation/conversation.service';
+import {
+  classifyIntentNode,
+  preClassifyNode,
+} from 'src/nodes/classify-intent.node';
+import { mergeUpdatesNode } from 'src/nodes/merge-updates.node';
+import { recalculateMissingNode } from 'src/nodes/recalculate-missing.node';
+import { checkBookingNode } from 'src/nodes/check-booking.node';
+import { BookingQueue } from 'src/booking/booking.queue';
+import { respondNode } from 'src/nodes/respond.node';
 
 export const MAP_NAME_FIELD = {
   checkIn: 'giờ đến',
@@ -25,6 +34,7 @@ export class MessageProcessor extends WorkerHost {
     // private confidenceGuard: ConfidenceGuard,
     // private validator: ValidatorService,
     private conversation: ConversationService,
+    private bookingQueue: BookingQueue,
   ) {
     super();
     console.log('Worker started');
@@ -161,56 +171,41 @@ export class MessageProcessor extends WorkerHost {
       }
 
       // 1. GET SESSION
-      let session = await this.redis.getSession(jobPayload.userId);
+      let session =
+        (await this.redis.getSession(jobPayload.userId)) ??
+        this.redis.createDefault(jobPayload, channelConfig);
 
-      if (!session) {
-        // Nếu chưa có, khởi tạo state mới tinh
-        session = this.redis.createDefault(jobPayload, channelConfig);
-      }
-      console.log('[Worker] Loaded session from Redis:', session);
-      const aiContext: AIContext = {
-        tenantName: session.tenantName,
-        status: session.status,
-        subStatus: session.subStatus,
-        primaryFlow: session.primaryFlow,
-        lastIntent: session.lastIntent,
-        lastAskedFields: session.missingFields,
-        suggestedSlots: session.suggestedSlots,
-        bookingData: session.bookingData, // Gồm giờ, tên, SĐT, số người...
-      };
-
-      const aiResult = await this.ai.parse(aiContext, jobPayload.text);
-      console.log('[Worker] AI parsed result:', aiResult);
-
-      const action = await this.conversation.intentRouter(
-        aiResult,
+      const preResult = await preClassifyNode(
         session,
-        channelConfig,
-        jobPayload,
+        jobPayload.text,
+        this.ai,
       );
+      let aiUpdates: any;
+      if (preResult.matched) {
+        // ── Pre-classify hit → skip AI hoàn toàn ──────────────────────
+        console.log('[Process] Pre-classify hit:', preResult.aiResult!.intent);
 
-      const reply = this.responseBuilder(action, session);
+        session = this.applyUpdate(session, {
+          lastIntent: preResult.aiResult!.intent,
+        });
+        aiUpdates = preResult.aiResult!.updates;
+      } else {
+        const intentResult = await classifyIntentNode(
+          session,
+          jobPayload.text,
+          this.ai,
+        );
 
-      await axios.post(
-        `https://graph.facebook.com/v19.0/me/messages`,
-        {
-          recipient: { id: jobPayload.platformSenderId },
-          message: { text: reply },
-        },
-        {
-          params: {
-            access_token: process.env.PAGE_ACCESS_TOKEN,
-          },
-        },
-      );
-      console.log('session after handler:', session);
-      //. CẬP NHẬT TRẠNG THÁI (State Merge)
+        session = this.applyUpdate(session, intentResult);
+        aiUpdates = intentResult._aiUpdates ?? {};
+      }
+
+      // ROUTER: Quyết định chạy pipeline nào
+      const reply = await this.router(session, aiUpdates, jobPayload);
+
       session.updatedAt = Date.now();
       await this.redis.saveSession(jobPayload.userId, session);
-
-      // this.confidenceGuard.check(aiResult);
-
-      // this.validator.validate(aiResult);
+      await this.sendToFacebook(jobPayload.platformSenderId, reply);
     } catch (e) {
       console.error('Error parsing AI context:', e);
       // await this.fail(jobPayload.id);
@@ -232,54 +227,72 @@ export class MessageProcessor extends WorkerHost {
     });
   }
 
-  responseBuilder(action, session) {
-    console.log('Building response for action:', action, session);
-    switch (action.type) {
-      case 'SWITCH_FLOW':
-        return 'Dạ mình đặt phòng ạ ❤️ Cho em xin giờ, số khách và sđt nhé.';
-      case 'SUGGEST_SLOT':
-        return `😓 Đã hết mất phòng trống, hiện tại phải đợi đến ${session.suggestedSlots[0]} mới có phòng trống ạ. Bạn có muốn đặt phòng vào khung giờ đó không ạ?`;
+  /**
+   * Merge Partial<session> vào session hiện tại
+   * KHÔNG mutate session gốc → tạo object mới
+   */
+  private applyUpdate(
+    session: KaraokeSessionState,
+    update: Partial<KaraokeSessionState>,
+  ): KaraokeSessionState {
+    // Lọc bỏ _aiUpdates (field nội bộ, không lưu vào session)
+    const { _aiUpdates, ...cleanUpdate } = update as any;
+    return { ...session, ...cleanUpdate };
+  }
 
-      case 'FULL_BOOKED':
-        return `😓 Rất tiếc hiện tại không còn phòng trống nào phù hợp với yêu cầu của bạn ạ. Bạn có thể gọi điện trực tiếp hootline để được hỗ trợ chính xác hơn nhé: 0123456789`;
-      case 'INTERRUPT':
-        return `
-Dạ giá bên em từ 200k/giờ ❤️
+  private async sendToFacebook(psid: string, text: string) {
+    await axios.post(
+      `https://graph.facebook.com/v19.0/me/messages`,
+      { recipient: { id: psid }, message: { text } },
+      { params: { access_token: process.env.PAGE_ACCESS_TOKEN } },
+    );
+  }
 
-Mình tiếp tục booking nhé,
-cho em xin thêm:
-${session.missingFields.join(', ')}
-`;
+  private async router(
+    session: KaraokeSessionState,
+    aiUpdates: any,
+    jobPayload: any,
+  ): Promise<string> {
+    const intent = session.lastIntent;
 
-      case 'INVALID_CONFIRM':
-        return 'Dạ mình chưa đủ thông tin để xác nhận booking ạ ❤️';
+    // Cancel → dừng ngay, không cần check gì thêm
+    // if (intent === 'cancel') {
+    //   return this.runCancelPipeline(session);
+    // }
 
-      case 'CONFIRM_SUGGESTED_SLOT':
-        return `
-Dạ mình có thể đặt phòng vào khung giờ ${session.suggestedSlots[0]} ạ ❤️`;
+    // // Hỏi giá → pipeline riêng
+    // if (intent === 'ask_price') {
+    //   return this.runAskPricePipeline(session, aiUpdates);
+    // }
 
-      case 'COMPLETE':
-        return 'Booking của anh/chị đã được tạo thành công ❤️';
+    // // Check availability → pipeline riêng
+    // if (intent === 'check_availability') {
+    //   return this.runCheckAvailabilityPipeline(session, aiUpdates);
+    // }
 
-      case 'CONFIRM':
-        return `
-Em xin xác nhận booking:
-
-${JSON.stringify(session.bookingData)}
-
-Anh/chị xác nhận giúp em nhé ❤️
-`;
-
-      case 'ASK_MISSING':
-        session.lastAskedFields = session.missingFields;
-
-        return `
-Cho em xin thêm:
-${session.missingFields.map((field) => MAP_NAME_FIELD[field] || field).join(', ')}
-`;
-
-      default:
-        return 'Dạ em chưa hiểu ý mình lắm ạ ❤️';
+    // Booking / update_booking → pipeline chính
+    if (['booking', 'update_booking'].includes(intent ?? '')) {
+      return this.runBookingPipeline(session, aiUpdates);
     }
+
+    // Đang giữa chừng booking mà user hỏi ngoài lề
+    if (session.primaryFlow === 'BOOKING' && intent === 'other') {
+      return this.runBookingPipeline(session, {}); // không merge gì thêm
+    }
+
+    return 'Dạ em chưa hiểu ý bạn lắm, bạn nhắn lại giúp em nhé ❤️';
+  }
+
+  // BOOKING PIPELINE
+  private async runBookingPipeline(session, aiUpdates): Promise<string> {
+    let s = session;
+    s = this.applyUpdate(s, mergeUpdatesNode(s, aiUpdates));
+    s = this.applyUpdate(s, recalculateMissingNode(s));
+    s = this.applyUpdate(
+      s,
+      await checkBookingNode(s, this.prisma, this.bookingQueue),
+    );
+    Object.assign(session, s); // cập nhật lại session gốc để save
+    return respondNode(s);
   }
 }

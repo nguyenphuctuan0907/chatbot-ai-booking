@@ -28,9 +28,11 @@ export interface AIParseResult {
 function normalizeMessage(message: string): string {
   return message
     .toLowerCase()
-    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
     .replace(/\s+/g, ' ')
-    .replace(/[.,!?]/g, '');
+    .trim();
 }
 
 const CONFIRM_KEYWORDS = [
@@ -109,11 +111,36 @@ export class AIService {
     }
   }
 
+  async prevParse(
+    context: Partial<AIContext>,
+    message: string,
+  ): Promise<AIParseResult> {
+    // Tách riêng System Prompt (Luật) và User Message (Câu chat)
+    const systemPrompt = this.buildSystemPromptPrev(context);
+
+    try {
+      return await this.callModel(
+        this.PRIMARY_MODEL,
+        systemPrompt,
+        message,
+        context,
+      );
+    } catch (err: any) {
+      console.warn('Primary model failed → fallback:', err?.message);
+      return await this.callModel(
+        this.FALLBACK_MODEL,
+        systemPrompt,
+        message,
+        context,
+      );
+    }
+  }
+
   private async callModel(
     model: string,
     systemPrompt: string,
     message: string,
-    context: AIContext,
+    context: AIContext | Partial<AIContext>,
     retry = 0,
   ): Promise<AIParseResult> {
     const controller = new AbortController();
@@ -166,7 +193,7 @@ export class AIService {
 
   private safeJSONParse(
     text: string,
-    context: AIContext,
+    context: AIContext | Partial<AIContext>,
     message: string,
   ): AIParseResult {
     console.log('Raw AI response:', text, context);
@@ -174,24 +201,24 @@ export class AIService {
     try {
       const obj = JSON.parse(text);
 
-      if (context.subStatus === 'AWAITING_CONFIRM_SUGGESTED_SLOT') {
-        if (isUserConfirm(message)) {
-          return {
-            intent: 'update_booking',
-            updates: {
-              ...obj.updates,
-              checkIn: context['suggestedSlots']?.[0] || obj.updates.checkIn, // Ưu tiên slot gợi ý nếu có
-            },
-            confidence: 1,
-          };
-        } else if (isUserReject(message)) {
-          return {
-            intent: 'cancel',
-            updates: obj.updates ?? {},
-            confidence: 1,
-          };
-        }
-      }
+      // if (context.subStatus === 'AWAITING_CONFIRM_SUGGESTED_SLOT') {
+      //   if (isUserConfirm(message)) {
+      //     return {
+      //       intent: 'update_booking',
+      //       updates: {
+      //         ...obj.updates,
+      //         checkIn: context['suggestedSlots']?.[0] || obj.updates.checkIn, // Ưu tiên slot gợi ý nếu có
+      //       },
+      //       confidence: 1,
+      //     };
+      //   } else if (isUserReject(message)) {
+      //     return {
+      //       intent: 'cancel',
+      //       updates: obj.updates ?? {},
+      //       confidence: 1,
+      //     };
+      //   }
+      // }
 
       return {
         intent: obj.intent ?? 'other',
@@ -266,6 +293,23 @@ EXAMPLES:
 "3 người"
 → {"intent":"update_booking","updates":{"people":3},"confidence":0.95}
 
+JSON ONLY.`;
+  }
+
+  private buildSystemPromptPrev(context: Partial<AIContext>): string {
+    const slot = context.suggestedSlots?.[0] ?? 'chưa xác định';
+
+    return `Hệ thống karaoke vừa gợi ý khách đặt phòng lúc ${slot}.
+ 
+Phân loại phản hồi của khách. Trả về JSON:
+{ "decision": "confirm" | "change_time" | "reject" | "unclear": "null" }
+ 
+Quy tắc:
+- "confirm"     : đồng ý slot ${slot} (ok/được/ừ/chốt/đặt đi...)
+- "change_time" : muốn giờ khác, "time" = giờ khách muốn (VD: "9h" → "09:00")
+- "reject"      : từ chối, không đề xuất giờ cụ thể (không/thôi/ko...)
+- "unclear"     : không xác định được
+ 
 JSON ONLY.`;
   }
 }
