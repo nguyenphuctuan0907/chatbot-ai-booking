@@ -175,7 +175,7 @@ export class MessageProcessor extends WorkerHost {
         (await this.redis.getSession(jobPayload.userId)) ??
         this.redis.createDefault(jobPayload, channelConfig);
 
-      const preResult = await preClassifyNode(
+      const preResult: any = await preClassifyNode(
         session,
         jobPayload.text,
         this.ai,
