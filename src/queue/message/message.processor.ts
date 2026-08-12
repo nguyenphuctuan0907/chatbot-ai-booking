@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { PrismaService } from '../../prisma/prisma.service';
-import { MESSAGE_QUEUE, MessageStatus } from './constants';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { MESSAGE_QUEUE, MessageStatus } from './message.constants';
 import { AIContext, AIService } from 'src/ai/ai.service';
 import { RedisService } from 'src/redis/redis.service';
-import { KaraokeSessionState } from './interfaces';
+import { KaraokeSessionState } from './message.interfaces';
 import { ConfidenceGuard } from 'src/guards/confidence.guard';
 import { ValidatorService } from 'src/validator/booking.validator';
 import { ConversationService } from 'src/conversation/conversation.service';
