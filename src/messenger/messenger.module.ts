@@ -5,7 +5,10 @@ import { QueueModule } from 'src/queue/queue.module';
 import { ConversationModule } from 'src/conversation/conversation.module';
 
 @Module({
-  imports: [forwardRef(() => QueueModule), forwardRef(() => ConversationModule)],
+  imports: [
+    forwardRef(() => QueueModule),
+    forwardRef(() => ConversationModule),
+  ],
   controllers: [MessengerController],
   providers: [MessengerService],
   exports: [MessengerService],

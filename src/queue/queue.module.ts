@@ -1,0 +1,20 @@
+import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
+
+import { MessageQueueModule } from './message/message.module';
+import { BookingQueueModule } from './booking/booking.module';
+
+@Module({
+  imports: [
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: Number(process.env.REDIS_PORT) || 6379,
+      },
+    }),
+
+    MessageQueueModule,
+    BookingQueueModule,
+  ],
+})
+export class QueueModule {}

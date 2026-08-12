@@ -1,25 +1,25 @@
-import { Controller, Post, Body, Get } from "@nestjs/common"
-import { BookingQueue } from "./booking.queue"
-import { BookingService } from "./booking.service"
+import { Controller, Post, Body, Get } from '@nestjs/common';
+import { BookingQueue } from './../queue/booking/booking.queue';
+import { BookingService } from './booking.service';
 
-@Controller("booking")
+@Controller('booking')
 export class BookingController {
   constructor(
     private bookingQueue: BookingQueue,
-    private bookingService: BookingService
+    private bookingService: BookingService,
   ) {}
 
   @Post()
   async create(@Body() body: any) {
-    await this.bookingQueue.addCreateBookingJob(body)
+    await this.bookingQueue.addCreateBookingJob(body);
 
     return {
-      status: "queued",
-    }
+      status: 'queued',
+    };
   }
 
   @Get()
   async getAll() {
-    return this.bookingService.getAllBookings()
+    return this.bookingService.getAllBookings();
   }
 }

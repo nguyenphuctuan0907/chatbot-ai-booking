@@ -15,7 +15,7 @@ import {
 import { mergeUpdatesNode } from 'src/nodes/merge-updates.node';
 import { recalculateMissingNode } from 'src/nodes/recalculate-missing.node';
 import { checkBookingNode } from 'src/nodes/check-booking.node';
-import { BookingQueue } from 'src/booking/booking.queue';
+import { BookingQueue } from 'src/queue/booking/booking.queue';
 import { respondNode } from 'src/nodes/respond.node';
 
 export const MAP_NAME_FIELD = {
