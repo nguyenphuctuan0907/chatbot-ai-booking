@@ -1,33 +1,20 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { MessageProcessor } from './message.processor';
+
 import { MessageQueueService } from './message.queue.service';
-import { PrismaModule } from '../../../prisma/prisma.module';
-import { AIModule } from 'src/ai/ai.module';
 import { EventService } from './message.event.service';
-import { RedisService } from 'src/redis/redis.service';
-import { ConversationModule } from 'src/conversation/conversation.module';
-import { BookingQueue } from 'src/queue/booking/booking.queue';
+import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
   imports: [
     BullModule.registerQueue({
       name: 'message-queue',
     }),
-
     PrismaModule,
-    AIModule,
-    forwardRef(() => ConversationModule),
   ],
 
-  providers: [
-    MessageProcessor,
-    MessageQueueService,
-    EventService,
-    RedisService,
-    BookingQueue,
-  ],
+  providers: [MessageQueueService, EventService],
 
-  exports: [MessageQueueService, EventService, RedisService],
+  exports: [MessageQueueService, EventService],
 })
 export class MessageQueueModule {}

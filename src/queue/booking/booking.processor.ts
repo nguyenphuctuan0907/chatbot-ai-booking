@@ -10,17 +10,17 @@ export class BookingProcessor extends WorkerHost {
   }
 
   async process(job: Job) {
-    console.log(`[BookingWorker] ${job.name}`, job.id);
+    console.log(`[BookingProcessor] ${job.name}`, job.id);
 
     switch (job.name) {
       case 'create-booking':
-        return this.bookingService.createBooking(job.data);
+        return this.bookingService.saveBooking(job.data);
 
       case 'update-booking':
-      // return this.bookingService.updateBooking(job.data);
-
-      case 'cancel-booking':
-      // return this.bookingService.cancelBooking(job.data);
+        return this.bookingService.updateBooking(
+          job.data.bookingId,
+          job.data.data,
+        );
 
       default:
         throw new Error(`Unknown booking job: ${job.name}`);

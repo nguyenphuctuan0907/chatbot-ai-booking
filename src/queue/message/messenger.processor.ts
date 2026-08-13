@@ -26,134 +26,36 @@ export const MAP_NAME_FIELD = {
 };
 
 @Processor(MESSAGE_QUEUE)
-export class MessageProcessor extends WorkerHost {
+export class MessengerProcessor extends WorkerHost {
   constructor(
     private prisma: PrismaService,
     private ai: AIService,
     private redis: RedisService,
     // private confidenceGuard: ConfidenceGuard,
     // private validator: ValidatorService,
-    private conversation: ConversationService,
     private bookingQueue: BookingQueue,
   ) {
     super();
+    console.log('========== CONSTRUCTOR ==========');
+    console.log('prisma:', this.prisma);
+    console.log(
+      'prisma instanceof PrismaService:',
+      this.prisma instanceof PrismaService,
+    );
+    console.log('ai:', this.ai);
+    console.log('redis:', this.redis);
+    console.log('bookingQueue:', this.bookingQueue);
     console.log('Worker started');
-  }
-
-  handleGreeting = async (_, msg) => {
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages`,
-      {
-        recipient: { id: msg.platformSenderId },
-        message: {
-          text: '68 MUSIC BOX chào bạn ạ! Bạn có muốn đặt phòng trước không ạ?',
-        },
-      },
-      {
-        params: {
-          access_token: process.env.PAGE_ACCESS_TOKEN,
-        },
-      },
-    );
-  };
-
-  handleAskPrice = async (_, msg) => {};
-
-  handleBooking = async (aiResult, session, channelConfig, jobPayload) => {
-    console.log({ aiResult, session, channelConfig });
-
-    return this.conversation.handleBooking(
-      aiResult,
-      session,
-      jobPayload.userId,
-    );
-  };
-
-  handleUpdateBooking = async (aiResult, session, channelConfig) => {
-    console.log({ aiResult, session, channelConfig });
-
-    return this.conversation.handleUpdateBooking(aiResult, session);
-  };
-
-  private INTENT_MAP = {
-    greeting: this.handleGreeting,
-    booking: this.handleBooking,
-    ask_price: this.handleAskPrice,
-    update_booking: this.handleUpdateBooking,
-    // other: handleOther,
-    // promotion: handlePromotion,
-    // ask_services_genneral: handleAskServicesGeneral,
-    // ask_services_other: handleAskServiceOther,
-    // ask_menu: handleAskMenu,
-    // ask_opening_time: handleAskOpeningTime,
-    // live_support: handleLiveSupport,
-    // ask_location: handleAskLocation,
-    // thank_you: handleThankYou,
-  };
-
-  async handleSendMessage({
-    name,
-    senderId,
-    conversationId,
-  }: {
-    name: string;
-    senderId: string;
-    conversationId: number;
-  }) {
-    const intent = await this.prisma.intent.findFirst({
-      where: { name },
-      include: { images: true },
-    });
-
-    if (!intent) {
-      console.warn('Intent ask_price not found in DB');
-      return;
-    }
-
-    if (intent.images && intent.images.length > 0) {
-      // Do something with the images, e.g., send them to the user
-      for (const img of intent.images) {
-        try {
-          await axios.post(
-            `https://graph.facebook.com/v19.0/me/messages`,
-            {
-              recipient: { id: senderId },
-              message: {
-                attachment: {
-                  type: 'image',
-                  payload: { url: img.url, is_reusable: true },
-                },
-              },
-            },
-            {
-              params: {
-                access_token: process.env.PAGE_ACCESS_TOKEN,
-              },
-            },
-          );
-        } catch (e) {
-          console.error('Error sending image:', e);
-        }
-      }
-    }
-
-    await axios.post(
-      `https://graph.facebook.com/v19.0/me/messages`,
-      {
-        recipient: { id: senderId },
-        message: { text: intent.replyText },
-      },
-      {
-        params: {
-          access_token: process.env.PAGE_ACCESS_TOKEN,
-        },
-      },
-    );
   }
 
   async process(job: any) {
     const { jobPayload } = job.data;
-    console.dir(jobPayload, { depth: null });
+    console.log('========== PROCESS ==========');
+    console.log('prisma:', this.prisma);
+    console.log(
+      'prisma instanceof PrismaService:',
+      this.prisma instanceof PrismaService,
+    );
 
     /* ---------- load context ---------- */
     try {
@@ -190,6 +92,7 @@ export class MessageProcessor extends WorkerHost {
         });
         aiUpdates = preResult.aiResult!.updates;
       } else {
+        console.log('session', { session, jobPayload });
         const intentResult = await classifyIntentNode(
           session,
           jobPayload.text,

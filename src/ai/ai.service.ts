@@ -4,7 +4,7 @@ import {
   PrimaryFlow,
   SessionStatus,
   SubSessionStatus,
-} from 'src/queue/interfaces';
+} from 'src/queue/message/message.interfaces';
 
 export interface AIContext {
   tenantName: string;

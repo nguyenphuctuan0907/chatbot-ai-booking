@@ -1,5 +1,8 @@
 // src/nodes/recalculate-missing.node.ts
-import { KaraokeSessionState, NodeResult } from 'src/queue/interfaces';
+import {
+  KaraokeSessionState,
+  NodeResult,
+} from 'src/queue/message/message.interfaces';
 
 // Field bắt buộc theo từng flow
 export const FLOW_REQUIRED_FIELDS: Record<string, string[]> = {

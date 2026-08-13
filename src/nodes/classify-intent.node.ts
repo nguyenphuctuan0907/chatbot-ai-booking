@@ -1,6 +1,9 @@
 // src/nodes/classify-intent.node.ts
 import { AIService, AIContext } from 'src/ai/ai.service';
-import { KaraokeSessionState, NodeResult } from 'src/queue/interfaces';
+import {
+  KaraokeSessionState,
+  NodeResult,
+} from 'src/queue/message/message.interfaces';
 
 /**
  * NODE 1: classify_intent

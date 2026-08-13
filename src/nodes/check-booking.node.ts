@@ -4,9 +4,9 @@ import {
   NodeResult,
   SessionStatus,
   SubSessionStatus,
-} from 'src/queue/interfaces';
+} from 'src/queue/message/message.interfaces';
 import { PrismaService } from 'prisma/prisma.service';
-import { BookingQueue } from 'src/booking/booking.queue';
+import { BookingQueue } from 'src/queue/booking/booking.queue';
 import { parseBookingTime } from 'src/common';
 import { checkAndBook } from 'src/booking/common';
 

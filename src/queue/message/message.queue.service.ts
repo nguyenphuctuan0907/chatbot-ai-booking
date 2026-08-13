@@ -1,21 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { InjectQueue } from "@nestjs/bullmq";
-import { Queue } from "bullmq";
+import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class MessageQueueService {
-  constructor(
-    @InjectQueue("message-queue") private queue: Queue,
-  ) {}
+  constructor(@InjectQueue('message-queue') private readonly queue: Queue) {}
 
   async enqueue(jobPayload: any) {
     await this.queue.add(
-      "process-message",
+      'process-message',
       { jobPayload },
       {
         delay: 1000, // ưu tiên admin 20s
         attempts: 3,
-        backoff: { type: "exponential", delay: 3000 },
+        backoff: { type: 'exponential', delay: 3000 },
         removeOnComplete: true,
         removeOnFail: false,
       },

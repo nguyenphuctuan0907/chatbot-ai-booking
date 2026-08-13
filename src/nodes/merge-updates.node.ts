@@ -3,7 +3,7 @@ import {
   KaraokeSessionState,
   NodeResult,
   PrimaryFlow,
-} from 'src/queue/interfaces';
+} from 'src/queue/message/message.interfaces';
 
 const INTENT_TO_FLOW: Record<string, PrimaryFlow> = {
   booking: 'BOOKING',

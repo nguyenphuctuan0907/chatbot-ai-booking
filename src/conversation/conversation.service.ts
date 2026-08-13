@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { MemoryService } from 'src/memory/memory.service';
 import { parseBookingTime } from 'src/common';
-import { BookingQueue } from 'src/booking/booking.queue';
+import { BookingQueue } from 'src/queue/booking/booking.queue';
 import { platform } from 'os';
 import { checkAndBook } from 'src/booking/common';
 import dayjs from 'dayjs';
@@ -12,7 +12,7 @@ import {
   KaraokeSessionState,
   PrimaryFlow,
   SessionStatus,
-} from 'src/queue/interfaces';
+} from 'src/queue/message/message.interfaces';
 import { AIParseResult } from 'src/ai/ai.service';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -115,7 +115,7 @@ export function findPriceRule(
 @Injectable()
 export class ConversationService {
   constructor(
-    private memory: MemoryService,
+    // private memory: MemoryService,
     private prisma: PrismaService,
     private bookingQueue: BookingQueue,
   ) {}

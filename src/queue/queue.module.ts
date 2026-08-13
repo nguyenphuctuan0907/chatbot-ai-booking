@@ -13,8 +13,9 @@ import { BookingQueueModule } from './booking/booking.module';
       },
     }),
 
-    MessageQueueModule,
     BookingQueueModule,
+    MessageQueueModule,
   ],
+  exports: [BookingQueueModule, MessageQueueModule],
 })
 export class QueueModule {}

@@ -1,5 +1,5 @@
 // src/nodes/respond.node.ts
-import { KaraokeSessionState } from 'src/queue/interfaces';
+import { KaraokeSessionState } from 'src/queue/message/message.interfaces';
 
 export const MAP_FIELD_NAME: Record<string, string> = {
   checkIn: 'giờ đến',
