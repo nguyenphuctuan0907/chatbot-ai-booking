@@ -17,6 +17,7 @@ import { recalculateMissingNode } from 'src/nodes/recalculate-missing.node';
 import { checkBookingNode } from 'src/nodes/check-booking.node';
 import { BookingQueue } from 'src/queue/booking/booking.queue';
 import { respondNode } from 'src/nodes/respond.node';
+import { Inject } from '@nestjs/common';
 
 export const MAP_NAME_FIELD = {
   checkIn: 'giờ đến',
@@ -28,30 +29,18 @@ export const MAP_NAME_FIELD = {
 @Processor(MESSAGE_QUEUE)
 export class MessengerProcessor extends WorkerHost {
   constructor(
-    private prisma: PrismaService,
-    private ai: AIService,
-    private redis: RedisService,
-    // private confidenceGuard: ConfidenceGuard,
-    // private validator: ValidatorService,
-    private bookingQueue: BookingQueue,
+    @Inject(PrismaService) private prisma: PrismaService,
+    @Inject(AIService) private ai: AIService,
+    @Inject(RedisService) private redis: RedisService,
+    @Inject(BookingQueue) private bookingQueue: BookingQueue,
   ) {
     super();
     console.log('========== CONSTRUCTOR ==========');
-    console.log('prisma:', this.prisma);
-    console.log(
-      'prisma instanceof PrismaService:',
-      this.prisma instanceof PrismaService,
-    );
-    console.log('ai:', this.ai);
-    console.log('redis:', this.redis);
-    console.log('bookingQueue:', this.bookingQueue);
-    console.log('Worker started');
   }
 
   async process(job: any) {
     const { jobPayload } = job.data;
     console.log('========== PROCESS ==========');
-    console.log('prisma:', this.prisma);
     console.log(
       'prisma instanceof PrismaService:',
       this.prisma instanceof PrismaService,

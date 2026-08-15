@@ -6,5 +6,6 @@ import { MessengerWorkerModule } from './message-worker.module';
 
 async function bootstrap() {
   await NestFactory.createApplicationContext(MessengerWorkerModule);
+  console.log('========== QUEUE WORKER STARTED ==========');
 }
 bootstrap();

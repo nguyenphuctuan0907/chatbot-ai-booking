@@ -2,20 +2,27 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 
 import { BookingService } from '../../booking/booking.service';
+import { Inject } from '@nestjs/common';
 
 @Processor('booking')
 export class BookingProcessor extends WorkerHost {
-  constructor(private readonly bookingService: BookingService) {
+  constructor(
+    @Inject(BookingService) private readonly bookingService: BookingService,
+  ) {
     super();
   }
 
   async process(job: Job) {
-    console.log(`[BookingProcessor] ${job.name}`, job.id);
+    console.log(`[BookingProcessor] ${job.name}`, job.id, job.data);
 
     switch (job.name) {
       case 'create-booking':
-        return this.bookingService.saveBooking(job.data);
-
+        try {
+          return this.bookingService.saveBooking(job.data);
+        } catch (error) {
+          console.error('Error processing create-booking job:', error);
+          throw error;
+        }
       case 'update-booking':
         return this.bookingService.updateBooking(
           job.data.bookingId,

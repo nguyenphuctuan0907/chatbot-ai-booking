@@ -94,21 +94,8 @@ export async function checkBookingNode(
 
   if (check.success) {
     // Đủ điều kiện → đẩy job booking
-    const user = await prisma.user.upsert({
-      where: { platformId: session.sessionId },
-      update: {
-        username: entity.name ?? undefined,
-        phone: entity.phone ?? undefined,
-      },
-      create: {
-        platformId: session.sessionId,
-        username: entity.name ?? undefined,
-        phone: entity.phone ?? undefined,
-      },
-    });
 
     await bookingQueue.addCreateBookingJob({
-      userId: user.id,
       peopleCount: entity.people!,
       startTime: parsedResult.time,
       endTime: parsedResult.endTime,

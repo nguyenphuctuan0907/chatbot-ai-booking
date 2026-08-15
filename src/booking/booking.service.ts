@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class BookingService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async createBooking(data: any) {
-    return this.prisma.booking.create({ data });
+    try {
+      console.log('Creating booking with data:', data);
+      return this.prisma.booking.create({ data });
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      throw error;
+    }
   }
 
   async getAllBookings(day?: string) {
@@ -44,11 +50,36 @@ export class BookingService {
   }
 
   async saveBooking(data: any) {
-    const checkBooking = await this.checkBookingInDay(data.day, data.userId);
+    try {
+      const user = await this.prisma.user.upsert({
+        where: { platformId: data.sessionId },
+        update: {
+          username: data.name ?? undefined,
+          phone: data.phone ?? undefined,
+        },
+        create: {
+          platformId: data.sessionId,
+          username: data.name ?? undefined,
+          phone: data.phone ?? undefined,
+        },
+      });
 
-    if (checkBooking.length > 0) {
-      return this.updateBooking(checkBooking[0].id, {
-        ...checkBooking[0],
+      const checkBooking = await this.checkBookingInDay(data.day, user.id);
+
+      if (checkBooking.length > 0) {
+        return this.updateBooking(checkBooking[0].id, {
+          ...checkBooking[0],
+          peopleCount: data.peopleCount,
+          checkIn: data.startTime,
+          checkOut: data.endTime,
+          roundedStartTime: data.roundedStartTime,
+          roundedEndTime: data.roundedEndTime,
+          day: data.day,
+          room: data.room,
+        });
+      }
+
+      return this.createBooking({
         peopleCount: data.peopleCount,
         checkIn: data.startTime,
         checkOut: data.endTime,
@@ -56,27 +87,20 @@ export class BookingService {
         roundedEndTime: data.roundedEndTime,
         day: data.day,
         room: data.room,
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+        tenant: {
+          connect: {
+            id: data.tenantId,
+          },
+        },
       });
+    } catch (error) {
+      console.error('Error saving booking:', error);
+      throw error;
     }
-
-    return this.createBooking({
-      peopleCount: data.peopleCount,
-      checkIn: data.startTime,
-      checkOut: data.endTime,
-      roundedStartTime: data.roundedStartTime,
-      roundedEndTime: data.roundedEndTime,
-      day: data.day,
-      room: data.room,
-      user: {
-        connect: {
-          id: data.userId,
-        },
-      },
-      tenant: {
-        connect: {
-          id: data.tenantId,
-        },
-      },
-    });
   }
 }
